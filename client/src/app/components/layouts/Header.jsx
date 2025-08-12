@@ -39,7 +39,7 @@ const Header = () => {
               <span className="relative z-10">{nav["route-name"]}</span>
               <span
                 className="
-                pointer-events-none absolute bottom-0 left-0 h-[3px] w-0
+                pointer-events-none absolute bottom-[10px] left-0 h-[3px] w-0
                 bg-blue-600 transition-all duration-300 ease-in-out
                 group-hover:w-full
                 "
