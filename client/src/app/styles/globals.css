@@ -30,6 +30,10 @@ body{
   @apply font-poppins text-base-text
 }
 
+h1{
+  @apply font-bold text-3xl md:text-4xl lg:text-5xl text-center w-3/4 mx-auto 
+}
+
 .body-content{
-  @apply w-3/4 max-w-[1400px] mx-auto
+  @apply w-full px-5 lg:w-3/4 max-w-[1400px] lg:mx-auto
 }

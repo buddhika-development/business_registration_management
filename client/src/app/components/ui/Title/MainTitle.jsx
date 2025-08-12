@@ -1,8 +1,8 @@
 import React from 'react'
 
-const MainTitle = () => {
+const MainTitle = ({title, className}) => {
   return (
-    <div>MainTitle</div>
+    <h1 className={`leading-[1.3] ${className}`}>{title}</h1>
   )
 }
 
