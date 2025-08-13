@@ -14,18 +14,16 @@ const Newsletter = () => {
         </p>
 
         
-        <form action="#" method="post" className="mt-6 flex w-full max-w-xl mx-auto">
+        <form action="#" method="post" className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-2 w-full max-w-xl mx-auto">
           <input
             type="email"
             placeholder="example@gmail.com"
-            className="flex-1 rounded-l-full border border-indigo-200 bg-indigo-50/30 px-4 py-3 text-sm
-                       focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400
-                       placeholder-gray-400"
+            className="col-span-3"
             required
           />
           <button
             type="submit"
-            className="rounded-r-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors"
+            className="btn"
           >
             Subscribe
           </button>
