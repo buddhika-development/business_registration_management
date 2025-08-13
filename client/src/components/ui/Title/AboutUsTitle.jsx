@@ -1,8 +1,8 @@
-import React, { Children } from 'react'
+// import React, { Children } from 'react'
 
 const AboutUsTitle = ({children, className}) => {
   return (
-    <h6 className={`leading-[1.2] ${className}`}>{children}</h6>
+    <h1 className={`leading-[1.2] ${className}`}>{children}</h1>
   )
 }
 
