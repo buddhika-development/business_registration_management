@@ -13,6 +13,6 @@ export const mainNavigation = [
     },
     {
         "route-name" : "Contact Us",
-        "href" : "/ContactU"
+        "href" : "/ContactUs"
     }
 ]

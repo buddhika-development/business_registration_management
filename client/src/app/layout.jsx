@@ -1,8 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./styles/globals.css";
 import { Poppins } from "next/font/google";
-import Header from "./components/layouts/Header";
-import FloatingButton from "./components/ui/FloatingChatButton";
+import Header from "../components/layouts/Header";
+import FloatingButton from "../components/ui/FloatingChatButton";
 
 const poppins = Poppins({
   subsets: ["latin"],
