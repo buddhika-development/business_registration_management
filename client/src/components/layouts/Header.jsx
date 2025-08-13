@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Logo from "../ui/Logo";
-import { mainNavigation } from "../../../../links";
+import { mainNavigation } from "../../../links";
 import { Menu, X } from "lucide-react";
 
 const Header = () => {
