@@ -8,7 +8,7 @@ export default function NameCheckerHero() {
   return (
     <section className="relative overflow-hidden">
       <div className="container mx-auto px-4 py-10 md:py-16">
-        <div className="grid items-center gap-4 md:grid-cols-2">
+        <div className="grid items-center gap-8 md:grid-cols-2">
           
           <div className="relative mx-auto max-w-sm md:max-w-none">
             <Image
