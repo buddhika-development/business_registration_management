@@ -2,7 +2,7 @@
 
 const ContactTitle = ({children, className}) => {
   return (
-    <h className={`leading-[1.2] ${className}`}>{children}</h>
+    <div className={`leading-[1.2] ${className}`}>{children}</div>
   )
 }
 
