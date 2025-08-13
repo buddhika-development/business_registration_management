@@ -33,7 +33,7 @@ body{
 }
 
 h1{
-  @apply font-bold text-3xl md:text-4xl lg:text-5xl text-center w-3/4 mx-auto 
+  @apply font-bold text-3xl md:text-3xl lg:text-4xl mx-auto 
 }
 
 input, textarea{

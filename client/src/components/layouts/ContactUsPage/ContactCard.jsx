@@ -25,7 +25,7 @@ export default function ContactCard() {
           <div className="space-y-6">
             <ContactHeader /> 
 
-            <form className="space-y-4">
+            <form className="space-y-4 mt-8">
               {/* Email */}
               <div>
                 <label className="block text-sm font-medium basetext mb-1">

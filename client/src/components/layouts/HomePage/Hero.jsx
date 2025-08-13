@@ -25,7 +25,7 @@ const Hero = () => {
       <div className="absolute left-1/2 bottom-0 -translate-x-1/2 w-11/12 lg:w-1/2 h-[360px] bg-white/60 rounded-t-3xl z-10 flex flex-col items-center justify-center gap-10 backdrop-blur-md">
         <MainTitle 
           title={"Welcome to the Department of the Registrar"}
-          className={"text-base-text text-shadow-sm"}
+          className={"text-base-text text-shadow-sm text-center w-3/4"}
         />
 
         {/* ==================================== */}
