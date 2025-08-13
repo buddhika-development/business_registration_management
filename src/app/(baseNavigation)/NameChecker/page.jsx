@@ -1,8 +1,11 @@
+import NameCheckerHero from '@/components/layouts/NameChecker/NameCheckerHero'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+      <NameCheckerHero />
+    </div>
   )
 }
 
