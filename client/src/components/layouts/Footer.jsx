@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { mainNavigation } from "../../../links";
+import Newsletter from "./HomePage/Newsletter";
 
 const ContactRow = ({ Icon, title, children }) => (
   <div className="flex items-start gap-3">
@@ -43,57 +44,67 @@ const services = [
 
 const Footer = () => {
   return (
-    <footer style={{ backgroundColor: "#5252C9" }}>
-      <div className="body-content py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-40 text-white/90">
-          {/* Contact */}
-          <div className="space-y-6">
-            <ContactRow Icon={PinIcon} title="Find us">
-              No 36, Main Street, Colombo 1
-            </ContactRow>
-            <ContactRow Icon={PhoneIcon} title="Call us">
-              +94 11 123 5467
-            </ContactRow>
-            <ContactRow Icon={MailIcon} title="Mail us">
-              info@registrar.gov.lk
-            </ContactRow>
-          </div>
-
-          {/* Services (plain text) */}
-          <div>
-            <div className="uppercase tracking-wide text-white/90 text-xs font-semibold mb-4">
-              Services
+    <div>
+      {/* =================================================== */}
+      {/* new alert section */}
+      {/* =================================================== */}
+      <Newsletter />
+      
+      {/* ================================================== */}
+      {/* footer section */}
+      {/* ================================================== */}
+      <footer style={{ backgroundColor: "#5252C9" }}>
+        <div className="body-content py-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-40 text-white/90">
+            {/* Contact */}
+            <div className="space-y-6">
+              <ContactRow Icon={PinIcon} title="Find us">
+                No 36, Main Street, Colombo 1
+              </ContactRow>
+              <ContactRow Icon={PhoneIcon} title="Call us">
+                +94 11 123 5467
+              </ContactRow>
+              <ContactRow Icon={MailIcon} title="Mail us">
+                info@registrar.gov.lk
+              </ContactRow>
             </div>
-            <ul className="space-y-2">
-              {services.map((label) => (
-                <li key={label}>{label}</li>
-              ))}
-            </ul>
-          </div>
 
-          {/* Useful Links */}
-          <div>
-            <div className="uppercase tracking-wide text-white/90 text-xs font-semibold mb-4">
-              Useful Links
+            {/* Services (plain text) */}
+            <div>
+              <div className="uppercase tracking-wide text-white/90 text-xs font-semibold mb-4">
+                Services
+              </div>
+              <ul className="space-y-2">
+                {services.map((label) => (
+                  <li key={label}>{label}</li>
+                ))}
+              </ul>
             </div>
-            <ul className="space-y-2">
-              {mainNavigation.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="hover:underline underline-offset-4"
-                  >
-                    {item["route-name"]}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+
+            {/* Useful Links */}
+            <div>
+              <div className="uppercase tracking-wide text-white/90 text-xs font-semibold mb-4">
+                Useful Links
+              </div>
+              <ul className="space-y-2">
+                {mainNavigation.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className="hover:underline underline-offset-4"
+                    >
+                      {item["route-name"]}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="h-[3px] w-full bg-indigo-700/40" />
-    </footer>
+        <div className="h-[3px] w-full bg-indigo-700/40" />
+      </footer>
+    </div>
   );
 };
 
