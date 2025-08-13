@@ -11,7 +11,7 @@ const RequestsTable = () => {
   const router = useRouter();
 
   const goToRequest = (id) => {
-    router.push(`/request/${id}`);
+    router.push(`/Request/${id}`);
   };
 
   const headers = [
