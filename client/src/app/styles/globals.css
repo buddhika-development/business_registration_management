@@ -7,6 +7,7 @@
   --primary : #5252C9;
   --basetext : #0B0B60;
   --error : #CC6355;
+  --input :#E0E7FF;
 }
 
 @theme inline {
@@ -15,6 +16,7 @@
   --color-primary : var(--primary);
   --color-base-text : var(--basetext);
   --color-error : var(--error);
+  --color-input : var(--input);
   
   --font-poppins: var(--font-poppins);
 }
@@ -32,6 +34,14 @@ body{
 
 h1{
   @apply font-bold text-3xl md:text-4xl lg:text-5xl text-center w-3/4 mx-auto 
+}
+
+input, textarea{
+  @apply w-full rounded-lg bg-input px-4 py-3 outline-none ring-0 focus:bg-indigo-50 focus:border-primary focus:ring-2 focus:ring-primary/30 border border-transparent transition
+}
+
+input{
+  @apply h-[40px]
 }
 
 .body-content{
