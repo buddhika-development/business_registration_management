@@ -51,3 +51,4 @@ input{
 .chat-floating-btn{
   @apply fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 cursor-pointer h-14 w-14 rounded-full shadow-lg bg-primary text-white flex items-center justify-center transition transform hover:scale-105 hover:bg-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 active:scale-95
 }
+

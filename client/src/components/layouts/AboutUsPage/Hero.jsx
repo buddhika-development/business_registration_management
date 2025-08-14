@@ -3,7 +3,7 @@ import AboutUsTitle from "@/components/ui/Title/AboutUsTitle";
 
 export default function Hero() {
   return (
-    <section className="relative h-[60vh] md:h-[600px] object-center overflow-hidden">
+    <section className="relative h-[60vh] md:h-[600px] object-top overflow-hidden">
       {/* background image */}
       <Image
         src="/aboutUs-hero.png"      
