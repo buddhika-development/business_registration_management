@@ -12,8 +12,8 @@ def health_check():
 @chat_bp.route("/chat", methods = ["POST"])
 def chat_response():
     user_query = request.form.get("query")
-    print(user_query)
+    user_history = request.form.get("history")
 
-    response = generate_response(user_query)
+    response = generate_response(user_query, user_history)
 
     return response

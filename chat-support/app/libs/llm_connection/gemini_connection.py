@@ -34,15 +34,15 @@ class GeminiConnection:
             query -> what is user need to know
 
         :param history:
-            history -> this contain the previous chats of the user
+            history -> this contains the previous chats of the user
 
         :return:
             output for user problem
         """
 
-        prompt = self.prompt_generator(query)
+        prompt = self.prompt_generator(query, history)
         response = self.llm.invoke(prompt)
-        print(response)
+
         return response.content
 
     def prompt_generator(self, query, history):
