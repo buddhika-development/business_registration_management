@@ -24,15 +24,18 @@ def documentValidation():
     try:
         # Access the data comes in the request body
         # gn_certificate = request.files.get("gnc")
-        phi_certificate = request.files.get("phi")
+        # phi_certificate = request.files.get("phi")
+        # affidavit = request.files.get("affidavit")
+        # lease = request.files.get("lease")
+        nic = request.files.get("nic")
 
-        if not phi_certificate:
+        if not nic:
             return jsonify({
                 "error": "No file provided"
             }), 400
 
         # result = documentContentScraper(gn_certificate)
-        result = documentContentScraper(phi_certificate)
+        result = documentContentScraper(nic)
 
         # Convert Pydantic model to dict for JSON serialization
         if hasattr(result, 'dict'):
