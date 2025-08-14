@@ -3,6 +3,7 @@ import "./styles/globals.css";
 import { Poppins } from "next/font/google";
 import Header from "../components/layouts/Header";
 import FloatingButton from "../components/ui/FloatingChatButton";
+import Footer from "@/components/layouts/Footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
         <Header />
         {children}
         <FloatingButton label="Chat" />
+        <Footer />
       </body>
     </html>
   );
