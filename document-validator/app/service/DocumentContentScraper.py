@@ -1,16 +1,13 @@
-from app.libs.prompt_generator.PromptTemplates.NIC import NICCertification
 from app.utils.pdfReader import pdfContentScraper
-from app.libs.prompt_generator.PromptTemplates.GramaNiladari import GramaNiladariCertification
-from app.libs.prompt_generator.PromptTemplates.PHI import PHICertification
-from app.libs.prompt_generator.PromptTemplates.Affidavit import AffidavitCertification
-from app.libs.prompt_generator.PromptTemplates.Lease import LeastCertification
+from app.libs.prompt_generator.PromptSelector import promptSelector
 
-def documentContentScraper(file):
-
+def documentContentScraper(key ,file, data):
     content = pdfContentScraper(file)
-    # GN = PHICertification("wishwa disanayake", content, " No. 456, Main Street, Matale, Sri Lanka", "matale")
-    # GN = AffidavitCertification("wishwa disanayake", content, "No. 456, Main Street, Matale, Sri Lanka")
-    # GN = LeastCertification("wishwa disanayake",content,"No. 456, Main Street, Matale, Sri Lanka"  )
-    GN = NICCertification("PARANAGAMA WIDANELAGE KAVINDU DULSARA MANAKAL PARANAGAMA", content,)
+    data["content"] = content
 
-    return GN.invoker()
+    conte_result = promptSelector(
+        data= data,
+        key= key
+    )
+
+    return conte_result.invoker()

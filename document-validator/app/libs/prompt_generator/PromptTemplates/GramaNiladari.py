@@ -13,7 +13,7 @@ class GramaNiladariCertificateDetails(BaseModel):
 
     document_validity : bool
     reason_for_success_or_false : str
-    name : str
+    gramasewaka_name : str
     email : str
     date : str
 

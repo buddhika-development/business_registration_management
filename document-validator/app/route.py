@@ -11,7 +11,7 @@ def healthCheck():
     }), 200
 
 
-@document_validator_bp.route("/document-validator", methods=["POST"])
+@document_validator_bp.route("/document-validator/gnc", methods=["POST"])
 def documentValidation():
     bear_key = request.headers.get("bear-key")
     authorized_request = bearKeyValidator(bear_key)
@@ -22,20 +22,22 @@ def documentValidation():
         }), 400
 
     try:
-        # Access the data comes in the request body
-        # gn_certificate = request.files.get("gnc")
-        # phi_certificate = request.files.get("phi")
-        # affidavit = request.files.get("affidavit")
-        # lease = request.files.get("lease")
-        nic = request.files.get("nic")
+        gn_certificate = request.files.get("gnc")
 
-        if not nic:
+        data = {}
+        data["name"] = request.form.get("name")
+
+        if not gn_certificate:
             return jsonify({
-                "error": "No file provided"
+                "error": "No required files provided"
             }), 400
 
         # result = documentContentScraper(gn_certificate)
-        result = documentContentScraper(nic)
+        result = documentContentScraper(
+            key="gnc",
+            file=gn_certificate,
+            data = data
+        )
 
         # Convert Pydantic model to dict for JSON serialization
         if hasattr(result, 'dict'):
