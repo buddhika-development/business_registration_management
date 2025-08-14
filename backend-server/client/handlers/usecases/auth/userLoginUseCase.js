@@ -46,6 +46,14 @@ export default async function userLoginUseCase(body) {
         nic: citizen.nic,
         role: 'user'
     });
+    console.log("Access token generated:", accessToken);
+    if (!accessToken) {
+        return {
+            ok: false,
+            status: 500,
+            message: "Failed to generate access token"
+        };
+    }
     console.log("Access token generated for user ID:", citizen.id);
 
     const familyId = await createFamily(citizen.id);
