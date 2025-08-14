@@ -41,7 +41,15 @@ input, textarea{
 }
 
 input{
-  @apply h-[46px]
+  @apply h-[40px]
+}
+
+input::placeholder{
+  @apply font-semibold text-[14px]
+}
+
+label{
+  @apply text-[14px] text-base-text/60
 }
 
 .body-content{

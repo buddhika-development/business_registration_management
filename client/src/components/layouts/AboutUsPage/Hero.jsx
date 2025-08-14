@@ -1,5 +1,5 @@
 import Image from "next/image";
-import AboutUsTitle from "@/components/ui/Title/AboutUsTitle";
+import AboutUsTitle from "@/components/ui/Title/HighlightTitle";
 
 export default function Hero() {
   return (
