@@ -1,9 +1,9 @@
 import Image from "next/image";
-import AboutUsTitle from "@/components/ui/Title/AboutUsTitle";
+import AboutUsTitle from "@/components/ui/Title/HighlightTitle";
 
 export default function Hero() {
   return (
-    <section className="relative h-[60vh] md:h-[600px] object-center overflow-hidden">
+    <section className="relative h-[60vh] md:h-[600px] object-top overflow-hidden">
       {/* background image */}
       <Image
         src="/aboutUs-hero.png"      

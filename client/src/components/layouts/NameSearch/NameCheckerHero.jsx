@@ -28,11 +28,10 @@ export default function NameCheckerHero() {
               <span className="text-[#5252C9]">is Unique on your Business</span>
             </h1>
 
-            <form  className="space-y-4">
+            <form  className="space-y-4 mt-8">
               <div className="space-y-2">
                 <label
                   htmlFor="biz-name"
-                  className="block text-sm font-semibold text-slate-700"
                 >
                   Business Name :
                 </label>
@@ -40,13 +39,12 @@ export default function NameCheckerHero() {
                   id="biz-name"
                   type="text"
                   placeholder="ex: Fresh Combo meal"
-                  className="w-full rounded-full border border-slate-200 bg-slate-50 px-5 py-3 outline-none transition focus:border-[#5252C9] focus:bg-white"
                 />
               </div>
 
               <button
                 type="submit"
-                className="inline-flex items-center justify-center rounded-full px-6 py-3 font-semibold text-white bg-[#5252C9] hover:opacity-95 disabled:opacity-60"
+                className="btn"
               >
                 Check Availability
               </button>

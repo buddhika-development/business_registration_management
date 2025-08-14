@@ -1,9 +1,9 @@
 // import React, { Children } from 'react'
 
-const AboutUsTitle = ({children, className}) => {
+const HighlightTitle = ({children, className}) => {
   return (
     <h1 className={`leading-[1.2] ${className}`}>{children}</h1>
   )
 }
 
-export default AboutUsTitle
+export default HighlightTitle
