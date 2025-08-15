@@ -88,15 +88,18 @@ export default function NameCheckerHero() {
                 Check Availability
               </button>
 
-              {error && <p className="text-red-600 mt-2">{error}</p>}
+              {error && <p className="text-red-600 mt-2 bg-red-50 py-3 border-[1px] border-red-200 rounded-lg px-5">{error}</p>}
               {result && result.Decision === "available" && (
-                <p className="text-green-600 mt-2">Business name is available!</p>
+                <div className=" bg-green-100 text-green-600 py-3 border-[1px] border-green-300 px-5 rounded-lg mt-2">
+                  <p className="text-[18px] font-semibold mb-2">Business name is available!</p>
+                  <a href="/RegisterBusiness" className="">Strat Registration before someone get your Iconic name</a>
+                </div>
               )}
               {result && result.Decision === "conflict" && (
-                <p className="text-yellow-600 mt-2">Business name already exists.</p>
+                <p className="text-yellow-600 bg-yellow-50 py-3 border-[1px] border-yellow-300 px-5 rounded-lg mt-2">Business name already exists.</p>
               )}
               {result && result.Decision === "blocked" && (
-                <p className="text-red-600 mt-2"> Business name contains restricted terms.</p>
+                <p className="text-red-600 bg-red-50 py-3 border-[1px] border-red-300 px-5 rounded-lg mt-2"> Business name contains restricted terms.</p>
               )}
             </form>
 

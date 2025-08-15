@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, request, jsonify
 from app.services.chat_service import generate_response
 
@@ -9,11 +11,20 @@ def health_check():
         'status' : 'Health'
     }), 200
 
-@chat_bp.route("/chat", methods = ["POST"])
+@chat_bp.route("/chat", methods=["POST"])
 def chat_response():
-    user_query = request.form.get("query")
-    user_history = request.form.get("history")
+    if request.form:
+        user_query = request.form.get("query", "", type=str)
+        history_raw = request.form.get("history", "[]")
+    else:
+        data = request.get_json(silent=True) or {}
+        user_query = data.get("query", "")
+        history_raw = data.get("history", "[]")
 
-    response = generate_response(user_query, user_history)
+    try:
+        user_history = json.loads(history_raw) if isinstance(history_raw, str) else (history_raw or [])
+    except json.JSONDecodeError:
+        user_history = []
 
-    return response
+    response_text = generate_response(user_query, user_history)
+    return jsonify({"reply": response_text})
