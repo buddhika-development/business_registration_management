@@ -20,8 +20,9 @@ const LoginForm = () => {
         password,
       });
 
-      const accessToken = res?.data?.data?.AccessToken;
+      const accessToken = res?.data?.data?.accessToken;
       const { refreshToken } = res?.data?.token || {};
+
 
       if (!accessToken) {
         console.warn("Unexpected login response:", res?.data);
