@@ -3,11 +3,11 @@ import * as useCase from "../usecases/requestUseCase.js";
 
 export const getRequests = async (req, res) => {
     try {
-        const { status } = req.query;
-        const requests = await useCase.fetchAllRequests();
+        const status = req.query.status?.trim();
         const filtered = status
-            ? requests.filter(r => r.status === status)
-            : requests;
+            ? await useCase.fetchRequestsByStatus(status)
+            : await useCase.fetchAllRequests();
+
         return ok(res, filtered, "Requests fetched successfully");
     } catch (err) {
         return fail(res, err.message, 500);
