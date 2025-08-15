@@ -4,7 +4,7 @@ import { fail } from "../utils/response.js";
 export default function authenticate(req, res, next) {
     const token = parseBearer(req.headers.authorization || '');
     if (!token) {
-        return fail(req, "Authenticattion Required", 401);
+        return fail(res, "Authenticattion Required", 401);
     }
 
     const decoded = verifyAccess(token);

@@ -20,4 +20,4 @@ export const verifyAccess = (token) => {
     }
 };
 
-export const parseBearer = (h) => (h?.startswith('Bearer ') ? h.substring(7) : null);
+export const parseBearer = (h) => (h?.startsWith('Bearer ') ? h.substring(7) : null);

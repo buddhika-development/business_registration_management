@@ -10,3 +10,14 @@ export async function findCitizenByNIC(nic) {
     if (error) throw error;
     return data;
 }
+
+export async function createCitizen({ nic, fullname, passwordhash }) {
+    const { data, error } = await adminClient
+        .from('citizens')
+        .insert({ nic, fullname, passwordhash })
+        .select('id, nic, fullname, role, isactive, createdat')
+        .single();
+
+    if (error) throw error;
+    return data;
+}
