@@ -12,6 +12,6 @@ def documentContentScraper(key ,file, data, bucket_name):
     )
 
     result = conte_result.invoker()
-    fileStore(file, bucket_name)
+    persist_location = fileStore(file, bucket_name)
 
-    return result
+    return result,persist_location

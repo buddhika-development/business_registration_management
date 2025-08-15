@@ -11,6 +11,6 @@ app = createApp(config)
 
 if __name__ == "__main__":
     app.run(
-        port= 8001,
+        port= config.PORT,
         debug= config.DEBUG
     )
