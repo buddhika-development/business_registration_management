@@ -11,6 +11,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG=True
+    PORT=8001
 
 class ProductionConfig(Config):
     DEBUG=False

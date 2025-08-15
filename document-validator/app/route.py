@@ -33,7 +33,7 @@ def documentValidation():
             }), 400
 
         # result = documentContentScraper(gn_certificate)
-        result = documentContentScraper(
+        result, persist_location = documentContentScraper(
             key="gnc",
             file=gn_certificate,
             data = data,
@@ -51,6 +51,8 @@ def documentValidation():
                 "email": result.email,
                 "date": result.date
             }
+
+        response_data["persist_location"] = persist_location
 
         return jsonify(response_data), 200
 
@@ -83,7 +85,7 @@ def leaseDocumentValidation():
             }), 400
 
         # result = documentContentScraper(gn_certificate)
-        result = documentContentScraper(
+        result, persist_location = documentContentScraper(
             key="lease",
             file= certificate,
             data = data,
@@ -101,6 +103,8 @@ def leaseDocumentValidation():
                 "email": result.email,
                 "date": result.date
             }
+
+        response_data["persist_location"] = persist_location
 
         return jsonify(response_data), 200
 
@@ -133,7 +137,7 @@ def affidavitDocumentValidation():
             }), 400
 
         # result = documentContentScraper(gn_certificate)
-        result = documentContentScraper(
+        result,persist_location = documentContentScraper(
             key="affidavit",
             file=certificate,
             data = data,
@@ -151,6 +155,8 @@ def affidavitDocumentValidation():
                 "email": result.email,
                 "date": result.date
             }
+
+        response_data["persist_location"] = persist_location
 
         return jsonify(response_data), 200
 
@@ -183,7 +189,7 @@ def phiDocumentValidation():
             }), 400
 
         # result = documentContentScraper(gn_certificate)
-        result = documentContentScraper(
+        result, persist_location = documentContentScraper(
             key="phi",
             file=certificate,
             data = data,
@@ -201,6 +207,8 @@ def phiDocumentValidation():
                 "email": result.email,
                 "date": result.date
             }
+
+        response_data["persist_location"] = persist_location
 
         return jsonify(response_data), 200
 
