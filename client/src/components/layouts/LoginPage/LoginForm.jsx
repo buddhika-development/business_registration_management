@@ -1,4 +1,7 @@
-import React, {useState} from "react";
+'use client';
+import { api } from "@/lib/apiClient";
+import axios from "axios";
+import React, { useState } from "react";
 
 const LoginForm = () => {
 
@@ -12,16 +15,26 @@ const LoginForm = () => {
     setErr("");
     setLoading(true);
     try {
-      const res = await apiJSON("/api/client/login", {
-        method: "POST",
-        body: { nic: nic, password: password },
+      const res = await api.post('/api/client/login', {
+        nic,
+        password,
       });
-      
-      const { AccessToken, RefreshToken } = res?.data || {};
-      setTokens({ accessToken: AccessToken, refreshToken: RefreshToken });
-      
+
+      const accessToken = res?.data?.data?.accessToken;
+      const { refreshToken } = res?.data?.token || {};
+
+
+      if (!accessToken) {
+        console.warn("Unexpected login response:", res?.data);
+        throw new Error("No access token returned from server.");
+      }
+
+      sessionStorage.setItem("ACCESS_TOKEN", accessToken);
+      console.log("Login successful, access token set in session storage.", accessToken);
+
     } catch (e) {
-      setErr(e.message);
+      const serverMsg = e?.response?.data?.errors?.message;
+      setErr(serverMsg || e.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -51,7 +64,7 @@ const LoginForm = () => {
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
-              Password : 
+              Password :
             </label>
             <input
               type="password"
