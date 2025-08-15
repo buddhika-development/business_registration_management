@@ -31,14 +31,18 @@ export const getRequestById = async (id) => {
         .from("business")
         .select("*")
         .eq("applicationno", id)
-        .single();
+        .maybeSingle();
     if (businessError) throw businessError;
+
+    if (!business) {
+        return null;
+    }
 
     const { data: owner, error: ownerError } = await adminClient
         .from("proprietor")
         .select("fullname")
         .eq("nic", business.proprietornic)
-        .single();
+        .maybeSingle();
     if (ownerError) throw ownerError;
 
     return {
@@ -78,3 +82,33 @@ export const updateRequestStatus = async (id, status) => {
         requestDate: updatedBusiness.commencementdate,
     };
 };
+
+export const getRequestsByStatus = async (status) => {
+    const { data: businesses, error } = await adminClient
+        .from("business")
+        .select("*")
+        .eq("applicationstatus", status)
+        .order("commencementdate", { ascending: false });
+
+    if (error) throw error;
+
+    const { data: proprietors, error: propError } = await adminClient
+        .from("proprietor")
+        .select("nic, fullname");
+
+    if (propError) throw propError;
+
+    return businesses.map(b => {
+        const owner = proprietors.find(p => p.nic === b.proprietornic);
+        return {
+            id: b.applicationno,
+            companyName: b.businessname,
+            ownerName: owner ? owner.fullname : "",
+            businessType: b.businesstype,
+            businessCategory: b.businesscategory,
+            status: b.applicationstatus,
+            requestDate: b.commencementdate,
+        };
+    });
+};
+
