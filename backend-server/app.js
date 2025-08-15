@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import authRouter from './client/routes/authRoutes.js';
 import nameCheckerRouter from "./client/routes/nameCheckerRoutes.js";
+import formRouter from './client/routes/formRoutes.js';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/client', authRouter);
 app.use("/api/client", nameCheckerRouter);
+app.use('/api/client', formRouter);
 
 app.use((req, res) => res.status(404).json({ ok: false, errors: { message: 'Not found' } }));
 app.use((err, req, res, next) => {

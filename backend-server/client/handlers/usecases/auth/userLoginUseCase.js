@@ -17,6 +17,7 @@ export default async function userLoginUseCase(body) {
     const { nic, password } = LoginSchema.parse(body);
 
     console.log("Login attempt for NIC:", nic);
+    console.log("Password provided:", password);
     if (!nic || !password) {
         return {
             ok: false,
@@ -33,7 +34,8 @@ export default async function userLoginUseCase(body) {
         message: "Invalid NIC or Password"
     }
 
-    const citizenPasswordHash = bcrypt.compare(password, citizen.passwordhash);
+    const citizenPasswordHash = await bcrypt.compare(password, citizen.passwordhash);
+    console.log("Citizen password hash:", citizenPasswordHash ? "Match" : "No Match");
     console.log("Password match:", citizenPasswordHash ? "Yes" : "No");
     if (!citizenPasswordHash) return {
         ok: false,
