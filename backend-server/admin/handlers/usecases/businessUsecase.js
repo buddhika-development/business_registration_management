@@ -8,4 +8,4 @@ export const fetchDocumentsWithProvidersByApplicationNo = async (id) => {
     return await repo.getDocumentsWithProvidersByApplicationNo(id);
 };
 export const fetchValidBusinesses = async () => await repo.getValidBusinesses();
-export const fetchPendingBusinesses = async () => await repo.getPendingBusinesses();
+export const fetchPendingBusinesses = async () => await repo.getBusinessesWithUnapprovedDocs();

@@ -8,7 +8,7 @@ router.get("/:id/proprietor", controller.getProprietor);
 router.get("/:id/locations", controller.getLocations);
 router.get("/:id/documents", controller.getDocuments);
 router.get("/valid", controller.getValidBusinesses);
-router.get("/pending", controller.getPendingBusinesses);
+router.get("/pending", controller.getBusinessesWithUnapprovedDocs);
 
 
 router.get("/:id", controller.getBusiness);
