@@ -84,6 +84,7 @@ export const updateRequestStatus = async (id, status) => {
 };
 
 export const getRequestsByStatus = async (status) => {
+    
     const { data: businesses, error } = await adminClient
         .from("business")
         .select("*")
@@ -100,6 +101,7 @@ export const getRequestsByStatus = async (status) => {
 
     return businesses.map(b => {
         const owner = proprietors.find(p => p.nic === b.proprietornic);
+        
         return {
             id: b.applicationno,
             companyName: b.businessname,

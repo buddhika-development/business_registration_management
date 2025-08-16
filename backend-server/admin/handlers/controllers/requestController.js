@@ -1,4 +1,5 @@
 import { ok, fail } from "../../../client/services/utils/response.js";
+import { getRequestsByStatus } from "../repositories/requestRepository.js";
 import * as useCase from "../usecases/requestUseCase.js";
 
 export const getRequests = async (req, res) => {
