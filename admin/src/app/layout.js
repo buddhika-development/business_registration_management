@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./styles/globals.css";
 import { Poppins } from "next/font/google";
+import Header from "@/components/layout/Header";
 
 
 const poppins = Poppins({
@@ -18,8 +19,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
+        suppressHydrationWarning 
         className={`${poppins.variable} antialiased`}
       >
+        <Header />
         {children}
       </body>
     </html>

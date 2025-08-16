@@ -3,42 +3,10 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import MainTitle from "@/components/ui/Titles/MainTitle";
 import { OrbitProgress } from "react-loading-indicators";
-
-// Helpers
-const formatMoney = (n) => (typeof n === "number" ? n.toLocaleString() : n);
-const formatDate = (iso) => (iso ? new Date(iso).toLocaleDateString() : "");
-
-// Minimal row (skips null/empty)
-const Row = ({ label, value }) => {
-  if (
-    value === null ||
-    value === undefined ||
-    (typeof value === "string" && value.trim() === "")
-  ) return null;
-
-  return (
-    <>
-      <p className="base-text font-semibold">{label}</p>
-      <p className="base-text break-words">{value}</p>
-    </>
-  );
-};
-
-// Skeleton UI
-const SkeletonBar = ({ className = "" }) => (
-  <div className={`h-4 rounded bg-slate-200 ${className}`} />
-);
-
-const SkeletonRows = ({ rows = 8 }) => (
-  <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-8">
-    {Array.from({ length: rows }).map((_, i) => (
-      <React.Fragment key={i}>
-        <SkeletonBar className="w-32" />
-        <SkeletonBar className="w-48" />
-      </React.Fragment>
-    ))}
-  </div>
-);
+import { SkeletonRows } from '@/components/skeleton/BusinessDetailsSkelaton';
+import { Row } from '@/components/ui/DataRow';
+import { formatMoney } from '@/utils/MoneyFormatter';
+import { formatDate } from '@/utils/TimeFormatter';
 
 export default function BusinessDetails({ request_Id }) {
   const [businessData, setBusinessData] = useState(null);
