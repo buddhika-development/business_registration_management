@@ -7,6 +7,10 @@ router.get("/:id/documents-with-providers", controller.getDocumentsWithProviders
 router.get("/:id/proprietor", controller.getProprietor);
 router.get("/:id/locations", controller.getLocations);
 router.get("/:id/documents", controller.getDocuments);
+router.get("/valid", controller.getValidBusinesses);
+router.get("/pending", controller.getPendingBusinesses);
+
+
 router.get("/:id", controller.getBusiness);
 
 export default router;

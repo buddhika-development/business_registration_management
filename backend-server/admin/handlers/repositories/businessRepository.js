@@ -61,3 +61,46 @@ export const getDocumentsWithProvidersByApplicationNo = async (id) => {
     if (error) throw error;
     return data;
 };
+
+
+export const getValidBusinesses = async () => {
+    const { data: appNos, error: viewError } = await adminClient
+        .from("business_all_docs_valid")
+        .select("applicationno");
+
+    if (viewError) throw viewError;
+
+    const applicationNumbers = appNos.map(item => item.applicationno);
+
+    if (applicationNumbers.length === 0) return [];
+
+    const { data, error } = await adminClient
+        .from("business")
+        .select("*")
+        .in("applicationno", applicationNumbers);
+
+    if (error) throw error;
+    return data;
+};
+
+
+export const getPendingBusinesses = async () => {
+    const { data: appNos, error: viewError } = await adminClient
+        .from("business_all_docs_pending")
+        .select("applicationno");
+
+    if (viewError) throw viewError;
+
+    const applicationNumbers = appNos.map(item => item.applicationno);
+
+    if (applicationNumbers.length === 0) return [];
+
+    const { data, error } = await adminClient
+        .from("business")
+        .select("*")
+        .in("applicationno", applicationNumbers);
+
+    if (error) throw error;
+    return data;
+};
+
