@@ -8,7 +8,7 @@ import authorizeRole from '../services/middleware/authorizeRole.js';
 
 const govRouter = Router();
 
-govRouter.post('/mail-sending', authenticate, authorizeRole('user'), sendMailController);
+govRouter.post('/mail-sending', sendMailController);
 
 // used by the external Gov portal
 govRouter.get('/verify/:token', getTokenInfoController);

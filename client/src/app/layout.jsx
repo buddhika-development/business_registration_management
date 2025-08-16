@@ -4,10 +4,11 @@ import { Poppins } from "next/font/google";
 import Header from "../components/layouts/Header";
 import FloatingButton from "../components/ui/FloatingChatButton";
 import Footer from "@/components/layouts/Footer";
+import { AuthProvider } from "../../context/AuthContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
-  variable : "--font-poppins",
+  variable: "--font-poppins",
   weight: ["400", "600", "700", "900"],
 });
 
@@ -17,16 +18,18 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  
+
   return (
     <html lang="en">
       <body
         className={`${poppins.variable} antialiased`}
       >
-        <Header />
-        {children}
-        <FloatingButton label="Chat" />
-        <Footer />
+        <AuthProvider>
+          <Header />
+          {children}
+          <FloatingButton label="Chat" />
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

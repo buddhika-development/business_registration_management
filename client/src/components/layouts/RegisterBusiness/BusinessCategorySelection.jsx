@@ -17,6 +17,7 @@ const BusinessCategorySelection = ({ onNext, onUnsupported }) => {
   const [category, setCategory] = useState("Food");
 
   const handleNext = () => {
+
     if (type === SUPPORTED_TYPE) {
       onNext?.({ type, category });
       return;

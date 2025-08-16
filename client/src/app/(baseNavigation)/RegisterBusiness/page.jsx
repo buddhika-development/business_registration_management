@@ -6,6 +6,7 @@ import BusinessDetails from "@/components/layouts/RegisterBusiness/BusinessDetai
 import OwnerDetails from "@/components/layouts/RegisterBusiness/OwnerDetails";
 import DocumentsSubmission from "@/components/layouts/RegisterBusiness/DocumentsSubmission";
 import Preview from "@/components/layouts/RegisterBusiness/Preview";
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 const STORAGE_KEY = "rb-wizard-v1";
 
@@ -18,12 +19,12 @@ function migrateBusiness(b) {
     PremisesAddress: {
       AddressLine1: pa.AddressLine1 ?? pa.addressLine1 ?? "",
       AddressLine2: pa.AddressLine2 ?? pa.addressLine2 ?? "",
-      City:         pa.City         ?? pa.city         ?? "",
-      PostalCode:   pa.PostalCode   ?? pa.postalCode   ?? "",
-      GnDivision:   pa.GnDivision   ?? pa.gnDivision   ?? "",
-      DsDivision:   pa.DsDivision   ?? pa.dsDivision   ?? "",
-      District:     pa.District     ?? pa.district     ?? "",
-      Province:     pa.Province     ?? pa.province     ?? "",
+      City: pa.City ?? pa.city ?? "",
+      PostalCode: pa.PostalCode ?? pa.postalCode ?? "",
+      GnDivision: pa.GnDivision ?? pa.gnDivision ?? "",
+      DsDivision: pa.DsDivision ?? pa.dsDivision ?? "",
+      District: pa.District ?? pa.district ?? "",
+      Province: pa.Province ?? pa.province ?? "",
     },
   };
 }
@@ -31,7 +32,12 @@ function migrateBusiness(b) {
 export default function Page() {
   const [step, setStep] = useState(1);
   const [unsupported, setUnsupported] = useState(null); // { type, category } | null
+  const { status } = useRequireAuth();
 
+  if (status !== 'authenticated') {
+    // while checking/refreshing, you can render a skeleton
+    return <div className="p-8">Checking session…</div>;
+  }
   // single source of truth
   const [form, setForm] = useState({
     category: { type: "", category: "" },
@@ -168,8 +174,8 @@ export default function Page() {
               typeof File !== "undefined" && v instanceof File
                 ? v.name
                 : v && typeof v === "object" && "name" in v
-                ? v.name
-                : v ?? null;
+                  ? v.name
+                  : v ?? null;
 
             const mapFiles = (obj) => {
               if (!obj) return obj;

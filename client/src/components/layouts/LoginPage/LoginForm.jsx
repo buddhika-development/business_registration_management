@@ -1,9 +1,11 @@
 'use client';
-import { api } from "@/lib/apiClient";
-import axios from "axios";
 import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
+import { useAuth } from "../../../../context/AuthContext";
 
 const LoginForm = () => {
+  const router = useRouter();
+  const { login } = useAuth();
 
   const [nic, setNic] = useState("");
   const [password, setPassword] = useState("");
@@ -15,26 +17,15 @@ const LoginForm = () => {
     setErr("");
     setLoading(true);
     try {
-      const res = await api.post('/api/client/login', {
-        nic,
-        password,
-      });
-
-      const accessToken = res?.data?.data?.accessToken;
-      const { refreshToken } = res?.data?.token || {};
-
-
-      if (!accessToken) {
-        console.warn("Unexpected login response:", res?.data);
-        throw new Error("No access token returned from server.");
+      const res = await login({ nic, password }); // <-- updates context.status
+      if (!res.ok) {
+        setErr(res.error || "Login failed");
+        return;
       }
-
-      sessionStorage.setItem("ACCESS_TOKEN", accessToken);
-      console.log("Login successful, access token set in session storage.", accessToken);
-
+      // success: context.status === 'authenticated' -> Header re-renders
+      router.replace("/"); // or "/RegisterBusiness"
     } catch (e) {
-      const serverMsg = e?.response?.data?.errors?.message;
-      setErr(serverMsg || e.message || "Login failed");
+      setErr(e?.message || "Login failed");
     } finally {
       setLoading(false);
     }

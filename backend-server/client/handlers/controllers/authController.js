@@ -16,17 +16,15 @@ export const userLogin = async (req, res) => {
         const r = await userLoginUseCase(req.body);
         if (!r.ok) return fail(res, r.message, r.status);
 
-        res.cookie('refreshToken', r.refreshToken.token, cookieOptions);
-
+        if (r.refreshToken?.token) {
+            res.cookie('refreshToken', r.refreshToken.token, cookieOptions);
+        }
 
         return ok(res, {
             user: r.user,
             accessToken: r.accessToken,
-            refreshToken: {
-                token: r.refreshToken.token,
-                expiresAt: r.refreshToken.expiresAt
-            }
-        }, "Login successful");
+            expiresInMin: parseInt(process.env.ACCESS_TOKEN_TTL_MIN || '10', 10)
+        }, "Login successful", 200);
     } catch (e) {
         const msg = e?.issues?.[0]?.message || "Invalid request body";
         return fail(res, msg, 400);
@@ -41,6 +39,7 @@ export const refresh = async (req, res) => {
     if (!r.ok) return fail(res, r.message, r.status || 401);
 
     res.cookie('refreshToken', r.rawNew, cookieOptions);
+
     return ok(res, {
         AccessToken: r.accessToken,
         ExpiresInMin: parseInt(process.env.ACCESS_TOKEN_TTL_MIN || '10', 10)
