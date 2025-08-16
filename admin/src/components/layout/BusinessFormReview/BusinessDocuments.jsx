@@ -1,19 +1,19 @@
 'use client';
 
-import { DocumentSkeletonList } from '@/components/skeleton/BusinessDocumentSkeleton';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { OrbitProgress } from 'react-loading-indicators';
-import { DocumentCard } from '../DocumentCard';
+import { DocumentSkeletonList } from '@/components/skeleton/BusinessDocumentSkeleton';
+import DocumentCard from '../DocumentCard';
 
 const BusinessDocuments = ({ request_Id }) => {
   const [documents, setDocuments] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [sendingId, setSendingId] = useState(null); // track which doc is sending
+  const [sendingId, setSendingId] = useState(null);
 
   const base = useMemo(
     () => (process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000').replace(/\/$/, ''),
-    []
+    []  
   );
 
   useEffect(() => {
@@ -28,13 +28,9 @@ const BusinessDocuments = ({ request_Id }) => {
         const decodedId = decodeURIComponent(request_Id);
         const url = `${base}/api/admin/business/${encodeURIComponent(decodedId)}/documents-with-providers`;
 
-        const res = await fetch(url, {
-          cache: 'no-store',
-          signal: controller.signal,
-        });
-        if (!res.ok) {
-          throw new Error(`API Error: ${res.status} - ${res.statusText}`);
-        }
+        const res = await fetch(url, { cache: 'no-store', signal: controller.signal });
+        if (!res.ok) throw new Error(`API Error: ${res.status} - ${res.statusText}`);
+
         const json = await res.json();
         setDocuments(json?.data ?? []);
       } catch (err) {
@@ -51,30 +47,36 @@ const BusinessDocuments = ({ request_Id }) => {
     return () => controller.abort();
   }, [request_Id, base]);
 
-  const handleReminder = async (doc, reason = 'pending') => {
+  // NEW: send reminder using your endpoint (backend composes the email)
+  const handleReminder = async (doc) => {
     try {
-      setSendingId(doc.id);
-      const res = await fetch(
-        `${base}/api/admin/documents/${encodeURIComponent(doc.id)}/reminder`,
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            documentId: doc.id,
-            applicationno: doc.applicationno,
-            document_name: doc.document_name,
-            reason, // 'invalid' or 'pending' (optional)
-          }),
-        }
-      );
+      if (!doc?.applicationno || !doc?.document_id) {
+        alert('Missing application number or document id.');
+        return;
+      }
+
+      setSendingId(doc.document_id);
+
+      const res = await fetch(`${base}/api/gov/mail-sending`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          applicationNo: String(doc.applicationno),
+          documentId: String(doc.document_id),
+        }),
+      });
+
       if (!res.ok) {
         const txt = await res.text().catch(() => '');
         throw new Error(`Failed to send reminder (${res.status}): ${txt || res.statusText}`);
       }
-      alert('Reminder sent.');
+
+      alert(
+        `Reminder sent to ${doc.document_provider_name || 'provider'} (${doc.document_provider_mail || 'no email'})`
+      );
     } catch (e) {
       alert(e?.message || 'Failed to send reminder.');
     } finally {
@@ -105,12 +107,12 @@ const BusinessDocuments = ({ request_Id }) => {
       {/* Documents */}
       {!isLoading && !error && Array.isArray(documents) && documents.length > 0 && (
         <div className="mt-6 space-y-3">
-          {documents.map((doc, index) => (
+          {documents.map((doc,index) => (
             <DocumentCard
               key={index}
               doc={doc}
-              onReminder={handleReminder}
-              isSending={sendingId === doc.id}
+              isSending={sendingId === doc.document_id}
+              onReminder={() => handleReminder(doc)}
             />
           ))}
         </div>
