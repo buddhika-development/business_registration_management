@@ -49,7 +49,7 @@ export default function RequestsTable() {
 
         const base = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
         const api = `${base.replace(/\/$/, "")}/api/admin/requests?status=inReview`;
-
+        
         const res = await fetch(api, {
           method: "GET",
           headers: { Accept: "application/json" },
@@ -62,8 +62,9 @@ export default function RequestsTable() {
           throw new Error(`Request failed (${res.status}): ${text || res.statusText}`);
         }
 
+        let json;
         try {
-          let json = await res.json();
+          json = await res.json();
         } catch {
           json = { data: [] };
         }
@@ -83,7 +84,7 @@ export default function RequestsTable() {
   const headers = ["Company Name", "Owner Name", "Request Date", "Status"];
 
   const formatDate = (d) => (d ? new Date(d).toLocaleDateString() : "");
-
+  console.log(requests)
   return (
     <div className="rounded-2xl overflow-hidden bg-white">
       <table className="w-full border-collapse">
@@ -107,13 +108,6 @@ export default function RequestsTable() {
 
           {loading && (
             <>
-              <tr>
-                <td colSpan={headers.length} className="px-5 py-4">
-                  <div className="flex justify-center">
-                    <OrbitProgress dense color="#4655c7" size="medium" />
-                  </div>
-                </td>
-              </tr>
               <TableSkeletonBody rows={6} cols={headers.length} />
             </>
           )}
@@ -126,7 +120,7 @@ export default function RequestsTable() {
             </tr>
           )}
 
-          {!loading && !error && requests.length === 0 && (
+          {requests.length === 0 && (
             <tr>
               <td colSpan={headers.length} className="px-5 py-6 base-text">
                 No requests found.
