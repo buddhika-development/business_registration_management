@@ -1,6 +1,6 @@
 import { getBusinessByApplicationNo } from '../../repositories/businessRegistrationRepository.js';
 import { getProprietorByNic, getPropertyOwnerAndPremises } from '../../repositories/proprietorRepository.js';
-import { validateGNC, validateLease, validateAffidavit, validateMOH } from '../../../services/documentValidationClient.js';
+import { validateGNC, validateLease, validateAffidavit, validateMOH } from '../../../services/documentValidation.js';
 
 function fileFrom(files, key) {
     const arr = files?.[key];
