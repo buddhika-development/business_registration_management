@@ -61,5 +61,9 @@ label{
 }
 
 .btn{
-  @apply bg-primary w-full h-[46px] text-white font-semibold rounded-xl cursor-pointer duration-200 hover:bg-primary/80
+  @apply bg-primary w-full h-[46px] text-white font-semibold rounded-xl cursor-pointer duration-200 hover:bg-primary/80 px-8
+}
+
+.mute-btn{
+  @apply bg-white w-full h-[46px] text-base-text/60 hover:text-base-text/80 border-[1px] border-base-text/20 hover:border-base-text/40 font-semibold rounded-xl cursor-pointer duration-200 px-8
 }
