@@ -1,6 +1,8 @@
 "use client";
 
 import BusinessDetails from "@/components/layout/BusinessFormReview/BusinessDetails";
+import BusinessDocuments from "@/components/layout/BusinessFormReview/BusinessDocuments";
+import BusinessOwnerDetails from "@/components/layout/BusinessFormReview/BusinessOwnerDetails";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -24,11 +26,11 @@ export default function Page() {
           <BusinessDetails request_Id={id}/>
         ) : pageState == 2 ? (
           <div>
-            second form section
+            <BusinessOwnerDetails request_Id = {id} />
           </div>
         ) : (
           <div>
-            third
+            <BusinessDocuments request_Id={id} />
           </div>
         )
       }
