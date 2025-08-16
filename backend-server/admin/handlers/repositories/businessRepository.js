@@ -51,3 +51,13 @@ export const getDocumentsByBusinessId = async (id) => {
     if (error) throw error;
     return data;
 };
+
+export const getDocumentsWithProvidersByApplicationNo = async (id) => {
+    const { data, error } = await adminClient
+        .from("document_providers_with_documents")
+        .select("*")
+        .eq("applicationno", id);
+
+    if (error) throw error;
+    return data;
+};
