@@ -46,3 +46,17 @@ export const getDocuments = async (req, res) => {
         return fail(res, err.message, 500);
     }
 };
+
+
+export const getDocumentsWithProviders = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const documents = await useCase.fetchDocumentsWithProvidersByApplicationNo(id);
+        return ok(res, documents, "Documents fetched successfully");
+    } catch (err) {
+        console.error(err);
+        return fail(res, err.message, 500);
+    }
+};
+
+
