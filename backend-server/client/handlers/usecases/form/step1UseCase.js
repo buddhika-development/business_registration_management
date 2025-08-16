@@ -1,13 +1,13 @@
 import z from "zod";
 import { generateApplicationNo } from "../../../services/utils/applicationNo.js";
-import { insertApplicationNo } from "../../repositories/businessRegistrationRepository.js";
+import { existsInDB, insertApplicationNo } from "../../repositories/businessRegistrationRepository.js";
 
 const businessTypes = ['sole'];
-const allowedCategories = ['food', 'retail', 'services', 'manufacturing'];
+const allowedCategories = ['food', 'Retail', 'Services', 'Manufacturing'];
 
 const step1Schema = z.object({
     businessType: z.string().transform(s => s.trim().toLowerCase()),
-    businessCategory: z.string().transform(s => s.trim().toLowerCase())
+    businessCategory: z.string().transform(s => s.trim())
 });
 
 export default async function step1UseCase(body) {
@@ -40,24 +40,27 @@ export default async function step1UseCase(body) {
         }
     }
 
-    const appNo = generateApplicationNo();
+    let appNo;
+    do {
+        appNo = generateApplicationNo();
+    } while (await existsInDB(appNo))
     console.log("Generated application number:", appNo);
 
-    const applicationNo = await insertApplicationNo(appNo);
-    if (!applicationNo) {
+    const step1 = await insertApplicationNo({ applicationNo: appNo, businessType, businessCategory });
+    if (!step1) {
         return {
             ok: false,
             status: 500,
-            message: "Failed to insert application number."
+            message: "Application unsuccessful!"
         }
     }
-    console.log("Application number inserted:", applicationNo);
+    console.log("Application number inserted:", step1);
 
     return {
         ok: true,
         status: 200,
         data: {
-            applicationNo
+            applicationNo: appNo
         },
         message: "Business registration process started successfully."
     }

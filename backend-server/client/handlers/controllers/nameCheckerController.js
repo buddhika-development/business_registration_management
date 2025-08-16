@@ -11,8 +11,8 @@ export const checkBusinessName = async (req, res) => {
         if (!r.ok) return fail(res, r.message, r.status);
 
         return ok(res, {
-            Decision: r.decision,
-            Reasons: r.reasons
+            decision: r.decision,
+            reasons: r.reasons
         }, r.message);
     } catch (e) {
         console.error(e);
