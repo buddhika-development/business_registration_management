@@ -46,3 +46,36 @@ export const getDocuments = async (req, res) => {
         return fail(res, err.message, 500);
     }
 };
+
+
+export const getDocumentsWithProviders = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const documents = await useCase.fetchDocumentsWithProvidersByApplicationNo(id);
+        return ok(res, documents, "Documents fetched successfully");
+    } catch (err) {
+        console.error(err);
+        return fail(res, err.message, 500);
+    }
+};
+
+
+export const getValidBusinesses = async (req, res) => {
+    try {
+        const businesses = await useCase.fetchValidBusinesses();
+        return ok(res, businesses, "Valid businesses fetched successfully");
+    } catch (err) {
+        return fail(res, err.message, 500);
+    }
+};
+
+export const getBusinessesWithUnapprovedDocs = async (req, res) => {
+    try {
+        const businesses = await useCase.fetchPendingBusinesses();
+        return ok(res, businesses, "Pending businesses fetched successfully with unapproved documents");
+    } catch (err) {
+        return fail(res, err.message, 500);
+    }
+};
+
+

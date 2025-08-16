@@ -51,3 +51,66 @@ export const getDocumentsByBusinessId = async (id) => {
     if (error) throw error;
     return data;
 };
+
+export const getDocumentsWithProvidersByApplicationNo = async (id) => {
+    const { data, error } = await adminClient
+        .from("document_providers_with_documents")
+        .select("*")
+        .eq("applicationno", id);
+
+    if (error) throw error;
+    return data;
+};
+
+
+export const getValidBusinesses = async () => {
+    const { data: appNos, error: viewError } = await adminClient
+        .from("business_all_docs_valid")
+        .select("applicationno");
+
+    if (viewError) throw viewError;
+
+    const applicationNumbers = appNos.map(item => item.applicationno);
+
+    if (applicationNumbers.length === 0) return [];
+
+    const { data, error } = await adminClient
+        .from("business")
+        .select("*")
+        .in("applicationno", applicationNumbers);
+
+    if (error) throw error;
+    return data;
+};
+
+
+export const getBusinessesWithUnapprovedDocs = async () => {
+    const { data: appNos, error } = await adminClient
+        .from("business_all_docs_pending")
+        .select("applicationno");
+
+    if (error) throw error;
+
+    const applicationNumbers = appNos.map(item => item.applicationno);
+    if (!applicationNumbers.length) return [];
+
+    const { data: businesses, error: bizError } = await adminClient
+        .from("business")
+        .select("*")
+        .in("applicationno", applicationNumbers);
+
+    if (bizError) throw bizError;
+
+    const { data: unapprovedDocs, error: docError } = await adminClient
+        .from("documents")
+        .select("*")
+        .in("applicationno", applicationNumbers)
+        .neq("document_authenticity", "approved");
+
+    if (docError) throw docError;
+
+    return businesses.map(biz => ({
+        ...biz,
+        unapprovedDocuments: unapprovedDocs.filter(doc => doc.applicationno === biz.applicationno)
+    }));
+};

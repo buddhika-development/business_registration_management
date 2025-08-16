@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { ThreeDot } from "react-loading-indicators";
 
 export default function NameCheckerHero() {
   const [businessName, setBusinessName] = useState("");
@@ -40,6 +41,8 @@ export default function NameCheckerHero() {
       setLoading(false);
     }
   };
+
+  console.log(result)
 
 
   return (
@@ -85,20 +88,26 @@ export default function NameCheckerHero() {
                 type="submit"
                 className="btn"
               >
-                Check Availability
+                {
+                  loading ? (
+                    <ThreeDot color="#dde2ff" size="medium" text="" textColor="" />
+                  ) : (
+                    <p>Check Name Availability</p>
+                  )
+                }
               </button>
 
               {error && <p className="text-red-600 mt-2 bg-red-50 py-3 border-[1px] border-red-200 rounded-lg px-5">{error}</p>}
-              {result && result.Decision === "available" && (
+              {result && result.decision === "available" && (
                 <div className=" bg-green-100 text-green-600 py-3 border-[1px] border-green-300 px-5 rounded-lg mt-2">
                   <p className="text-[18px] font-semibold mb-2">Business name is available!</p>
                   <a href="/RegisterBusiness" className="">Strat Registration before someone get your Iconic name</a>
                 </div>
               )}
-              {result && result.Decision === "conflict" && (
+              {result && result.decision === "conflict" && (
                 <p className="text-yellow-600 bg-yellow-50 py-3 border-[1px] border-yellow-300 px-5 rounded-lg mt-2">Business name already exists.</p>
               )}
-              {result && result.Decision === "blocked" && (
+              {result && result.decision === "blocked" && (
                 <p className="text-red-600 bg-red-50 py-3 border-[1px] border-red-300 px-5 rounded-lg mt-2"> Business name contains restricted terms.</p>
               )}
             </form>

@@ -1,0 +1,1 @@
+export const formatMoney = (n) => (typeof n === "number" ? n.toLocaleString() : n);

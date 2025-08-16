@@ -1,5 +1,12 @@
 # Project Guidelines
 
+API guide line : https://docs.google.com/document/d/1hcRQVfNOmc2JKX-Osg1MYPa9S1QNN4Dva_npZaCpI5U/edit?usp=sharing
+
+ERD : https://app.eraser.io/workspace/D4lXyDrEEVJwtkjCggwt?origin=share
+
+Sequence Diagrams : https://drive.google.com/file/d/1rTjqCWM3MG68BQcPSbyNSNKh-KNp_qna/view?usp=sharing
+
+
 ## Naming Conventions
 
 To ensure consistency across the codebase, follow these rules:
