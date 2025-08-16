@@ -4,10 +4,12 @@ import { Poppins } from "next/font/google";
 import Header from "../components/layouts/Header";
 import FloatingButton from "../components/ui/FloatingChatButton";
 import Footer from "@/components/layouts/Footer";
+import { AuthProvider } from "../context/AuthContext";
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   subsets: ["latin"],
-  variable : "--font-poppins",
+  variable: "--font-poppins",
   weight: ["400", "600", "700", "900"],
 });
 
@@ -17,16 +19,26 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  
+
   return (
     <html lang="en">
       <body
         className={`${poppins.variable} antialiased`}
       >
-        <Header />
-        {children}
-        <FloatingButton label="Chat" />
-        <Footer />
+        <AuthProvider>
+          <Header />
+          {children}
+          <FloatingButton label="Chat" />
+          <Footer />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: { borderRadius: '12px' },
+              success: { duration: 3500 },
+              error: { duration: 5000 },
+            }}
+          />
+        </AuthProvider>
       </body>
     </html>
   );

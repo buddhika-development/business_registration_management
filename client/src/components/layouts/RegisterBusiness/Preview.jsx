@@ -1,12 +1,13 @@
 "use client";
 import React from "react";
 import {
-    IconInfoDot as InfoDot,
-    IconTag as Tag,
-    IconHome as Home,
-    IconSection as SectionIcon,
-  } from "@/components/ui/icons/icons";
-  
+  IconInfoDot as InfoDot,
+  IconTag as Tag,
+  IconHome as Home,
+  IconSection as SectionIcon,
+} from "@/components/ui/icons/icons";
+import { useRouter } from "next/navigation";
+
 
 /**
  * Props:
@@ -18,9 +19,14 @@ import {
 const btnOutline =
   "px-6 py-3 rounded-[16px] border font-semibold transition hover:bg-indigo-50 hover:border-primary hover:text-primary";
 
-export default function Preview({ data, onBack, onConfirm }) {
-  const chip  = "flex items-center gap-2 rounded-xl bg-indigo-50/80 px-3 py-2 text-sm border border-transparent";
-  const row   = "grid md:grid-cols-2 gap-3";
+export default function Preview({ data, onBack }) {
+  const chip = "flex items-center gap-2 rounded-xl bg-indigo-50/80 px-3 py-2 text-sm border border-transparent";
+  const row = "grid md:grid-cols-2 gap-3";
+  const router = useRouter();
+  const onConfirm = () => {
+    router.push('/')
+  }
+
 
   return (
     <section className="min-h-[calc(100vh-80px)] py-8">

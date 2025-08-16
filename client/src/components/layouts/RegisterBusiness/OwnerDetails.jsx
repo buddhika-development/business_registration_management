@@ -5,7 +5,7 @@ import {
   PROVINCES,
   DISTRICTS_BY_PROVINCE
 } from "@/lib/sl-geo";
-import {DS_DIVISIONS_BY_DISTRICT,} from "@/lib/ds-divisions-by-district";
+import { DS_DIVISIONS_BY_DISTRICT, } from "@/lib/ds-divisions-by-district";
 
 const btnOutline =
   "px-6 py-3 rounded-[16px] border font-semibold transition hover:bg-indigo-50 hover:border-primary hover:text-primary";
@@ -32,7 +32,7 @@ const OwnerDetails = ({ onBack, onNext, initial, appNo }) => {
     email: initial?.email || "",
   });
 
-  const [errors, setErrors]   = useState({});
+  const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const rootRef = useRef(null);
@@ -42,12 +42,12 @@ const OwnerDetails = ({ onBack, onNext, initial, appNo }) => {
   }, [appNo, form.applicationNo]);
 
   const setField = (k, v) => setForm(p => ({ ...p, [k]: v }));
-  const setAddr  = (k, v) => setForm(p => ({ ...p, residentialAddress: { ...p.residentialAddress, [k]: v } }));
+  const setAddr = (k, v) => setForm(p => ({ ...p, residentialAddress: { ...p.residentialAddress, [k]: v } }));
   const markTouched = (key) => setTouched(t => ({ ...t, [key]: true }));
-  const clearError  = (key) => setErrors(e => { const n = { ...e }; delete n[key]; return n; });
+  const clearError = (key) => setErrors(e => { const n = { ...e }; delete n[key]; return n; });
 
   // --- dependent Province -> District (tolerant) ---
-  const currentProvince   = (form.residentialAddress.province || "").trim();
+  const currentProvince = (form.residentialAddress.province || "").trim();
   const persistedDistrict = (form.residentialAddress.district || "").trim();
 
   const baseDistrictOptions = useMemo(
@@ -73,8 +73,8 @@ const OwnerDetails = ({ onBack, onNext, initial, appNo }) => {
   }, [currentProvince]); // stable deps
 
   // --- dependent District -> DS Division (new) ---
-  const currentDistrict   = (form.residentialAddress.district || "").trim();
-  const persistedDS       = (form.residentialAddress.dsDivision || "").trim();
+  const currentDistrict = (form.residentialAddress.district || "").trim();
+  const persistedDS = (form.residentialAddress.dsDivision || "").trim();
 
   const baseDSOptions = useMemo(
     () => DS_DIVISIONS_BY_DISTRICT[currentDistrict] || [],
@@ -108,23 +108,23 @@ const OwnerDetails = ({ onBack, onNext, initial, appNo }) => {
     const e = {};
     const addr = form.residentialAddress || {};
 
-    if (isBlank(form.fullName))         e["fullName"] = "Full name is required";
+    if (isBlank(form.fullName)) e["fullName"] = "Full name is required";
     if (isBlank(form.nameWithInitials)) e["nameWithInitials"] = "Name with initials is required";
-    if (!form.dateOfBirth)              e["dateOfBirth"] = "Date of birth is required";
+    if (!form.dateOfBirth) e["dateOfBirth"] = "Date of birth is required";
     if (isBlank(form.nic) && isBlank(form.passportNo))
       e["identity"] = "Provide either NIC or Passport No.";
 
     if (isBlank(addr.addressLine1)) e["residentialAddress.addressLine1"] = "Address Line 1 is required";
-    if (isBlank(addr.city))         e["residentialAddress.city"] = "City is required";
-    if (isBlank(addr.postalCode))   e["residentialAddress.postalCode"] = "Postal Code is required";
-    if (isBlank(addr.province))     e["residentialAddress.province"] = "Province is required";
-    if (isBlank(addr.district))     e["residentialAddress.district"] = "District is required";
-    if (isBlank(addr.dsDivision))   e["residentialAddress.dsDivision"] = "DS Division is required";
-    if (isBlank(addr.gsDivision))   e["residentialAddress.gsDivision"] = "GS Division is required";
+    if (isBlank(addr.city)) e["residentialAddress.city"] = "City is required";
+    if (isBlank(addr.postalCode)) e["residentialAddress.postalCode"] = "Postal Code is required";
+    if (isBlank(addr.province)) e["residentialAddress.province"] = "Province is required";
+    if (isBlank(addr.district)) e["residentialAddress.district"] = "District is required";
+    if (isBlank(addr.dsDivision)) e["residentialAddress.dsDivision"] = "DS Division is required";
+    if (isBlank(addr.gsDivision)) e["residentialAddress.gsDivision"] = "GS Division is required";
 
     if (isBlank(form.mobileNo)) e["mobileNo"] = "Mobile No is required";
     if (form.mobileNo && !/^\d{9,10}$/.test(String(form.mobileNo))) e["mobileNo"] = "Mobile No should be 9–10 digits";
-    if (form.fixedNo && !/^\d{9,10}$/.test(String(form.fixedNo)))   e["fixedNo"]  = "Fixed No should be 9–10 digits";
+    if (form.fixedNo && !/^\d{9,10}$/.test(String(form.fixedNo))) e["fixedNo"] = "Fixed No should be 9–10 digits";
 
     if (isBlank(form.email)) e["email"] = "Email is required";
     else if (!/^\S+@\S+\.\S+$/.test(form.email)) e["email"] = "Email format looks invalid";
@@ -159,7 +159,7 @@ const OwnerDetails = ({ onBack, onNext, initial, appNo }) => {
           `[data-err-key="${firstKey.replace(/"/g, '\\"')}"]`
         );
         node?.scrollIntoView({ behavior: "smooth", block: "center" });
-      } catch {}
+      } catch { }
       return;
     }
 

@@ -3,7 +3,7 @@ import { findApplicationNo, checkStatus, insertStep3, updateBusiness } from "../
 import { NIC_REGEX, EMAIL_REGEX, SL_MOBILE_REGEX, isSLFixedLine, isISODateString, isPastOrToday, PASSPORT_REGEX, POSTAL_REGEX } from "../../../services/utils/validators.js";
 import z from "zod";
 
-const honorifics = ['mr', 'mrs', 'miss', 'ms', 'rev'];
+const honorifics = ['mr.', 'mrs.', 'miss.', 'ms.', 'rev.'];
 const genders = ['male', 'female', 'other'];
 
 const addressSchema = z.object({
@@ -36,7 +36,7 @@ const step3Schema = z.object({
 export default async function step3UseCase(body) {
 
     const parsed = step3Schema.safeParse(body);
-
+    console.log("step 3", body);
     if (!parsed.success) {
         const first = parsed.error.issues?.[0]?.message || 'Invalid request body';
         return { ok: false, status: 400, message: first };

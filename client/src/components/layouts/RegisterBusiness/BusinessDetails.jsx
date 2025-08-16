@@ -5,7 +5,7 @@ import {
   PROVINCES,
   DISTRICTS_BY_PROVINCE
 } from "@/lib/sl-geo";
-import {DS_DIVISIONS_BY_DISTRICT,} from "@/lib/ds-divisions-by-district";
+import { DS_DIVISIONS_BY_DISTRICT, } from "@/lib/ds-divisions-by-district";
 
 const btnOutline =
   "px-6 py-3 rounded-[16px] border font-semibold transition hover:bg-indigo-50 hover:border-primary hover:text-primary";
@@ -25,16 +25,16 @@ function normalizeInitial(src = {}) {
     PremisesAddress: {
       AddressLine1: norm(pa.AddressLine1 ?? pa.addressLine1),
       AddressLine2: norm(pa.AddressLine2 ?? pa.addressLine2),
-      City:         norm(pa.City         ?? pa.city),
-      PostalCode:   norm(pa.PostalCode   ?? pa.postalCode),
-      GnDivision:   norm(pa.GnDivision   ?? pa.gnDivision),
-      DsDivision:   norm(pa.DsDivision   ?? pa.dsDivision),
-      District:     norm(pa.District     ?? pa.district),
-      Province:     norm(pa.Province     ?? pa.province),
+      City: norm(pa.City ?? pa.city),
+      PostalCode: norm(pa.PostalCode ?? pa.postalCode),
+      GnDivision: norm(pa.GnDivision ?? pa.gnDivision),
+      DsDivision: norm(pa.DsDivision ?? pa.dsDivision),
+      District: norm(pa.District ?? pa.district),
+      Province: norm(pa.Province ?? pa.province),
     },
     PropertyOwner: {
       Name: norm(po.Name ?? po.name),
-      Nic:  norm(po.Nic  ?? po.nic),
+      Nic: norm(po.Nic ?? po.nic),
     },
     Lease: {
       ValidUntil: norm(le.ValidUntil ?? le.validUntil),
@@ -80,8 +80,8 @@ export default function BusinessDetails({ onBack, onNext, initial, appNo }) {
       ...src,
       ApplicationNo: appNo ?? src.ApplicationNo ?? prev.ApplicationNo,
       PremisesAddress: { ...(prev.PremisesAddress || {}), ...(src.PremisesAddress || {}) },
-      PropertyOwner:  { ...(prev.PropertyOwner  || {}), ...(src.PropertyOwner  || {}) },
-      Lease:          { ...(prev.Lease          || {}), ...(src.Lease          || {}) },
+      PropertyOwner: { ...(prev.PropertyOwner || {}), ...(src.PropertyOwner || {}) },
+      Lease: { ...(prev.Lease || {}), ...(src.Lease || {}) },
     }));
 
     setTimeout(() => {
@@ -91,9 +91,9 @@ export default function BusinessDetails({ onBack, onNext, initial, appNo }) {
   }, [initial, appNo]);
 
   const setField = (k, v) => setForm(p => ({ ...p, [k]: v }));
-  const setAddr  = (k, v) => setForm(p => ({ ...p, PremisesAddress: { ...(p.PremisesAddress ?? {}), [k]: v } }));
-  const setOwner = (k, v) => setForm(p => ({ ...p, PropertyOwner:  { ...(p.PropertyOwner  ?? {}), [k]: v } }));
-  const setLease = (k, v) => setForm(p => ({ ...p, Lease:          { ...(p.Lease          ?? {}), [k]: v } }));
+  const setAddr = (k, v) => setForm(p => ({ ...p, PremisesAddress: { ...(p.PremisesAddress ?? {}), [k]: v } }));
+  const setOwner = (k, v) => setForm(p => ({ ...p, PropertyOwner: { ...(p.PropertyOwner ?? {}), [k]: v } }));
+  const setLease = (k, v) => setForm(p => ({ ...p, Lease: { ...(p.Lease ?? {}), [k]: v } }));
   const markTouched = (key) => setTouched(t => ({ ...t, [key]: true }));
 
   // Current address pieces
@@ -103,7 +103,7 @@ export default function BusinessDetails({ onBack, onNext, initial, appNo }) {
   };
   const currentProvince = addr.Province || "";
   const currentDistrict = addr.District || "";
-  const currentDS       = addr.DsDivision || "";
+  const currentDS = addr.DsDivision || "";
 
   // District options (by province) – tolerant to preserved value during hydration
   const districtBaseOptions = useMemo(
@@ -184,15 +184,15 @@ export default function BusinessDetails({ onBack, onNext, initial, appNo }) {
     const lease = state.Lease ?? {};
 
     if (isBlank(state.BusinessName)) e["BusinessName"] = "Business Name is required.";
-    if (!state.CommencementDate)     e["CommencementDate"] = "Date of commencement is required.";
+    if (!state.CommencementDate) e["CommencementDate"] = "Date of commencement is required.";
 
     if (isBlank(a.AddressLine1)) e["PremisesAddress.AddressLine1"] = "Address Line 1 is required.";
-    if (isBlank(a.City))         e["PremisesAddress.City"] = "City is required.";
-    if (isBlank(a.PostalCode))   e["PremisesAddress.PostalCode"] = "Postal Code is required.";
-    if (isBlank(a.Province))     e["PremisesAddress.Province"] = "Province is required.";
-    if (isBlank(a.District))     e["PremisesAddress.District"] = "District is required.";
-    if (isBlank(a.DsDivision))   e["PremisesAddress.DsDivision"] = "DS Division is required.";
-    if (isBlank(a.GnDivision))   e["PremisesAddress.GnDivision"] = "GN Division is required.";
+    if (isBlank(a.City)) e["PremisesAddress.City"] = "City is required.";
+    if (isBlank(a.PostalCode)) e["PremisesAddress.PostalCode"] = "Postal Code is required.";
+    if (isBlank(a.Province)) e["PremisesAddress.Province"] = "Province is required.";
+    if (isBlank(a.District)) e["PremisesAddress.District"] = "District is required.";
+    if (isBlank(a.DsDivision)) e["PremisesAddress.DsDivision"] = "DS Division is required.";
+    if (isBlank(a.GnDivision)) e["PremisesAddress.GnDivision"] = "GN Division is required.";
 
     // Cross-field validity
     if (a.Province && a.District) {
@@ -213,7 +213,7 @@ export default function BusinessDetails({ onBack, onNext, initial, appNo }) {
 
     if (state.OwnershipType === "consent") {
       if (isBlank(owner.Name)) e["PropertyOwner.Name"] = "Owner name is required for consent.";
-      if (isBlank(owner.Nic))  e["PropertyOwner.Nic"]  = "Owner NIC is required for consent.";
+      if (isBlank(owner.Nic)) e["PropertyOwner.Nic"] = "Owner NIC is required for consent.";
     }
 
     if (!isBlank(state.InitialCapital) && !isNumber(state.InitialCapital))
@@ -221,7 +221,7 @@ export default function BusinessDetails({ onBack, onNext, initial, appNo }) {
     if (!isBlank(state.AnnualTurnover) && !isNumber(state.AnnualTurnover))
       e["AnnualTurnover"] = "Annual Turnover must be a number.";
 
-    if (isBlank(state.DeedNo))         e["DeedNo"] = "Deed no is required.";
+    if (isBlank(state.DeedNo)) e["DeedNo"] = "Deed no is required.";
     if (isBlank(state.TradeLicenseNo)) e["TradeLicenseNo"] = "Trade License No is required.";
 
     return e;
@@ -245,25 +245,25 @@ export default function BusinessDetails({ onBack, onNext, initial, appNo }) {
           `[data-err-key="${firstKey.replace(/"/g, '\\"')}"]`
         );
         node?.scrollIntoView({ behavior: "smooth", block: "center" });
-      } catch {}
+      } catch { }
       return;
     }
 
     onNext({
-      ApplicationNo:   form.ApplicationNo,
-      BusinessName:    form.BusinessName,
-      CommencementDate:form.CommencementDate,
+      ApplicationNo: form.ApplicationNo,
+      BusinessName: form.BusinessName,
+      CommencementDate: form.CommencementDate,
       BusinessDescription: form.BusinessDescription,
       ProductServices: form.ProductServices,
-      InitialCapital:  form.InitialCapital,
-      AnnualTurnover:  form.AnnualTurnover,
-      PremisesType:    form.PremisesType,
+      InitialCapital: form.InitialCapital,
+      AnnualTurnover: form.AnnualTurnover,
+      PremisesType: form.PremisesType,
       PremisesAddress: { ...(form.PremisesAddress ?? {}) },
-      OwnershipType:   form.OwnershipType,
-      PropertyOwner:   { ...(form.PropertyOwner ?? {}) },
-      Lease:           { ...(form.Lease ?? {}) },
-      DeedNo:          form.DeedNo,
-      TradeLicenseNo:  form.TradeLicenseNo,
+      OwnershipType: form.OwnershipType,
+      PropertyOwner: { ...(form.PropertyOwner ?? {}) },
+      Lease: { ...(form.Lease ?? {}) },
+      DeedNo: form.DeedNo,
+      TradeLicenseNo: form.TradeLicenseNo,
     });
   };
 
@@ -533,30 +533,30 @@ export default function BusinessDetails({ onBack, onNext, initial, appNo }) {
             </div>
           )}
 
-          {form.OwnershipType === "consent" && (
-            <div className="grid md:grid-cols-2 gap-5">
-              <div data-err-key="PropertyOwner.Name">
-                <label className={label}>Property Owner Name :</label>
-                <input
-                  className={input}
-                  value={form.PropertyOwner?.Name || ""}
-                  onChange={(e) => setOwner("Name", e.target.value)}
-                  onBlur={() => markTouched("PropertyOwner.Name")}
-                />
-                {errFor("PropertyOwner.Name") && <p className={hintErr}>{errFor("PropertyOwner.Name")}</p>}
-              </div>
-              <div data-err-key="PropertyOwner.Nic">
-                <label className={label}>Property Owner NIC :</label>
-                <input
-                  className={input}
-                  value={form.PropertyOwner?.Nic || ""}
-                  onChange={(e) => setOwner("Nic", e.target.value)}
-                  onBlur={() => markTouched("PropertyOwner.Nic")}
-                />
-                {errFor("PropertyOwner.Nic") && <p className={hintErr}>{errFor("PropertyOwner.Nic")}</p>}
-              </div>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            <div data-err-key="PropertyOwner.Name">
+              <label className={label}>Property Owner Name :</label>
+              <input
+                className={input}
+                value={form.PropertyOwner?.Name || ""}
+                onChange={(e) => setOwner("Name", e.target.value)}
+                onBlur={() => markTouched("PropertyOwner.Name")}
+              />
+              {errFor("PropertyOwner.Name") && <p className={hintErr}>{errFor("PropertyOwner.Name")}</p>}
             </div>
-          )}
+            <div data-err-key="PropertyOwner.Nic">
+              <label className={label}>Property Owner NIC :</label>
+              <input
+                className={input}
+                value={form.PropertyOwner?.Nic || ""}
+                onChange={(e) => setOwner("Nic", e.target.value)}
+                onBlur={() => markTouched("PropertyOwner.Nic")}
+              />
+              {errFor("PropertyOwner.Nic") && <p className={hintErr}>{errFor("PropertyOwner.Nic")}</p>}
+            </div>
+          </div>
+
 
           {/* Numbers */}
           <div className="grid md:grid-cols-2 gap-5">
