@@ -30,8 +30,8 @@ export default function ApprovedRequests() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
-  const [busyKey, setBusyKey] = useState(null); // approving applicationno
-  const [openKey, setOpenKey] = useState(null); // which card is open
+  const [busyKey, setBusyKey] = useState(null);
+  const [openKey, setOpenKey] = useState(null);
 
   const base = useMemo(
     () => (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000").replace(/\/$/, ""),
@@ -128,7 +128,7 @@ export default function ApprovedRequests() {
               open={open}
               approving={approving}
               onToggle={() => setOpenKey((k) => (k === b.applicationno ? null : b.applicationno))}
-              onApprove={() => approve(b.applicationno)}
+              // onApprove={() => approve(b.applicationno)}
             />
           );
         })}

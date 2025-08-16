@@ -47,7 +47,7 @@ const BusinessDocuments = ({ request_Id }) => {
     return () => controller.abort();
   }, [request_Id, base]);
 
-  // NEW: send reminder using your endpoint (backend composes the email)
+  // send reminder using your endpoint (backend composes the email)
   const handleReminder = async (doc) => {
     try {
       if (!doc?.applicationno || !doc?.document_id) {

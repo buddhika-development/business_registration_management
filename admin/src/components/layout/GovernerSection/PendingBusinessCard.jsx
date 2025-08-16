@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Chevron } from "../../../../public/svg/Chevron";
 
 const REQUIRED_FIELDS = [
   { key: "proprietornic",       label: "Proprietor NIC" },
@@ -28,17 +29,6 @@ const Badge = ({ children, tone = "warn", className = "" }) => {
     </span>
   );
 };
-
-const Chevron = ({ open }) => (
-  <svg
-    className={`h-5 w-5 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    aria-hidden="true"
-  >
-    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.17l3.71-2.94a.75.75 0 111.04 1.08l-4.24 3.36a.75.75 0 01-.94 0L5.21 8.31a.75.75 0 01.02-1.1z" clipRule="evenodd" />
-  </svg>
-);
 
 const isPresent = (v) =>
   !(v === null || v === undefined || (typeof v === "string" && v.trim() === ""));
@@ -73,8 +63,6 @@ export default function PendingBusinessCard({
     }
   };
 
-
-  // Badge label/tone based on unapproved docs count
   const badgeTone = docCount === 0 ? "success" : "warn";
   const badgeLabel =
     docCount === 0 ? "No unapproved documents" : `${docCount} unapproved document${docCount > 1 ? "s" : ""}`;
@@ -137,7 +125,7 @@ export default function PendingBusinessCard({
           open ? "max-h-[2200px]" : "max-h-0",
         ].join(" ")}
       >
-        
+
         {/* Missing fields checklist */}
         <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
           {REQUIRED_FIELDS.map(({ key, label }) => {

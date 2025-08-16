@@ -40,11 +40,9 @@ export default function BusinessCard({
   open = false,
   onToggle,
 }) {
-  // local status so we can update UI after approve
   const [status, setStatus] = useState(business.applicationstatus || "inReview");
   const [approving, setApproving] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
-
   const isVerified = status === "Verified";
   const canApprove = !isVerified && !approving;
 
@@ -53,7 +51,6 @@ export default function BusinessCard({
     []
   );
 
-  // keyboard support for the header "button"
   const onHeaderKeyDown = (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -68,19 +65,28 @@ export default function BusinessCard({
     try {
       const res = await fetch(`${base}/api/admin/status-change/`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ applicationNo: business.applicationno }), // <-- exact field name
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ applicationNo: String(business.applicationno) }),
       });
 
-      if (!res.ok) {
-        const text = await res.text().catch(() => "");
-        throw new Error(text || `Approve failed (${res.status})`);
+      // Try to read JSON (some backends may return no body)
+      let payload = null;
+      try {
+        payload = await res.clone().json();
+      } catch {
+        /* ignore parse error */
       }
 
-      // If backend returns JSON, you can read it:
-      // const data = await res.json();
+      if (!res.ok || (payload && payload.ok === false)) {
+        const msg =
+          payload?.message ||
+          (await res.text().catch(() => "")) ||
+          res.statusText ||
+          "Approve failed";
+        throw new Error(msg);
+      }
 
-      // Optimistically mark as verified for UI
+      // Success: flip badge
       setStatus("Verified");
     } catch (e) {
       setErrMsg(e?.message || "Failed to approve");
@@ -92,13 +98,13 @@ export default function BusinessCard({
   return (
     <div className="mt-8">
       <div className="mb-5">
-        <MainTitle title={"Approved Authentication"} />
+        <MainTitle title="Approved Authentication" />
       </div>
 
       <div className="rounded-2xl border border-slate-200 bg-white">
         {/* Header row */}
         <div className="w-full p-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
-          {/* Clickable toggle area */}
+          {/* Clickable toggle area (NOT a <button>) */}
           <div
             role="button"
             tabIndex={0}
@@ -124,7 +130,9 @@ export default function BusinessCard({
               disabled={!canApprove}
               className={[
                 "px-4 py-2 rounded-lg text-sm font-medium",
-                canApprove ? "bg-primary text-white hover:opacity-90" : "bg-slate-200 text-slate-500 cursor-not-allowed",
+                canApprove
+                  ? "bg-primary text-white hover:opacity-90"
+                  : "bg-slate-200 text-slate-500 cursor-not-allowed",
               ].join(" ")}
               aria-disabled={!canApprove}
             >
@@ -177,12 +185,7 @@ export default function BusinessCard({
           <p className="base-text font-semibold">GN Certificate:</p>
           <p className="base-text">
             {business.gncertificateurl ? (
-              <a
-                href={business.gncertificateurl}
-                target="_blank"
-                rel="noreferrer"
-                className="underline"
-              >
+              <a href={business.gncertificateurl} target="_blank" rel="noreferrer" className="underline">
                 View document
               </a>
             ) : (
