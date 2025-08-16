@@ -1,48 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Card, Row } from "../BusinessOwnerCard";
+import { formatDate } from "@/utils/TimeFormatter";
+import { titleCase } from "@/utils/TitleCase";
+import { Skeleton } from "@/components/skeleton/BusinessOwnerSkeleton";
 
-const titleCase = (s) =>
-  s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : s;
-
-const formatDate = (iso) => (iso ? new Date(iso).toLocaleDateString() : null);
-
-const Row = ({ label, value }) => {
-  if (
-    value === null ||
-    value === undefined ||
-    (typeof value === "string" && value.trim() === "")
-  )
-    return null;
-  return (
-    <>
-      <p className="base-text">{label}</p>
-      <p className="base-text font-medium break-words">{value}</p>
-    </>
-  );
-};
-
-const Card = ({ title, children }) => (
-  <section>
-    <h3 className="mb-3 text-sm font-semibold tracking-wide base-text">{title}</h3>
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 p-4 rounded-xl border border-slate-200 bg-white">
-      {children}
-    </div>
-  </section>
-);
-
-const Skeleton = () => (
-  <div className="mt-8 space-y-6 animate-pulse">
-    {[...Array(3)].map((_, i) => (
-      <div
-        key={i}
-        className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-xl border border-slate-200 bg-white"
-      >
-        {[...Array(6)].map((__, j) => (
-          <div key={j} className="h-4 rounded bg-slate-200" />
-        ))}
-      </div>
-    ))}
-  </div>
-);
 
 export default function BusinessOwnerDetails({ request_Id }) {
   const [ownerData, setOwnerData] = useState(null);
