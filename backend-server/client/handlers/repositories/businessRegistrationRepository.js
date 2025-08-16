@@ -206,3 +206,21 @@ export async function getBusinessByApplicationNo(applicationNo) {
     if (error) throw error;
     return data; // null if not found
 }
+
+export async function updateAppStatus({ appNo }) {
+
+    const status = { applicationstatus: 'approved' }
+
+    const { data, error } = await adminClient
+        .from('business')
+        .update(status)
+        .eq('applicationno', appNo)
+        .select('applicationno')
+        .maybeSingle()
+
+    if (error) throw error
+    if (!data) {
+        return { ok: false, status: 404, message: 'Something went wrong in property owner details.' };
+    }
+    return data;
+}

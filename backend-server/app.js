@@ -10,6 +10,7 @@ import requestRoutes from "./admin/routes/requestRoutes.js";
 import formRouter from './client/routes/formRoutes.js';
 import businessRouter from "./admin/routes/businessRoutes.js";
 import govRouter from './client/routes/govRoutes.js';
+import statusChange from './client/routes/businessStatusChangingRoutes.js';
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use("/api/admin/requests", requestRoutes);
 app.use('/api/client', formRouter);
 app.use("/api/admin/business", businessRouter);
 app.use("/api/gov", govRouter);
+app.use("/api/admin", statusChange)
 
 app.use((req, res) => res.status(404).json({ ok: false, errors: { message: 'Not found' } }));
 app.use((err, req, res, next) => {
