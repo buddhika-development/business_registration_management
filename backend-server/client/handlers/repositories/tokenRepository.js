@@ -65,3 +65,31 @@ export async function markUsed(tokenId) {
 
     if (error) throw error;
 }
+
+export async function insertDocAuthToken(row) {
+    const { data, error } = await adminClient
+        .from('doc_auth_token')
+        .insert(row)
+        .select('id')
+        .single();
+    if (error) throw error;
+    return data.id;
+}
+
+export async function findTokenByHash(tokenHash) {
+    const { data, error } = await adminClient
+        .from('doc_auth_token')
+        .select('*')
+        .eq('token_hash', tokenHash)
+        .maybeSingle();
+    if (error) throw error;
+    return data;
+}
+
+export async function markTokenUsed({ tokenId, status }) {
+    const { error } = await adminClient
+        .from('doc_auth_token')
+        .update({ used_at: new Date().toISOString(), status })
+        .eq('id', tokenId);
+    if (error) throw error;
+}

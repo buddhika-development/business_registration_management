@@ -28,9 +28,6 @@ export async function insertApplicationNo({ applicationNo, businessType, busines
     return data.applicationno;
 }
 
-export async function insertBusinessDetails({ }) {
-
-}
 
 export async function findApplicationNo(applicationNo) {
     const { data, error } = await adminClient
@@ -198,4 +195,14 @@ export async function updateBusiness({ appNo, pNic }) {
         return { ok: false, status: 404, message: 'Something went wrong in property owner details.' };
     }
     return data;
+}
+
+export async function getBusinessByApplicationNo(applicationNo) {
+    const { data, error } = await adminClient
+        .from('business')
+        .select('applicationno, businesscategory, proprietornic')
+        .eq('applicationno', applicationNo)
+        .maybeSingle();
+    if (error) throw error;
+    return data; // null if not found
 }
