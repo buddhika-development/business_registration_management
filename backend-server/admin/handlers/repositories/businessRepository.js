@@ -84,23 +84,33 @@ export const getValidBusinesses = async () => {
 };
 
 
-export const getPendingBusinesses = async () => {
-    const { data: appNos, error: viewError } = await adminClient
+export const getBusinessesWithUnapprovedDocs = async () => {
+    const { data: appNos, error } = await adminClient
         .from("business_all_docs_pending")
         .select("applicationno");
 
-    if (viewError) throw viewError;
+    if (error) throw error;
 
     const applicationNumbers = appNos.map(item => item.applicationno);
+    if (!applicationNumbers.length) return [];
 
-    if (applicationNumbers.length === 0) return [];
-
-    const { data, error } = await adminClient
+    const { data: businesses, error: bizError } = await adminClient
         .from("business")
         .select("*")
         .in("applicationno", applicationNumbers);
 
-    if (error) throw error;
-    return data;
-};
+    if (bizError) throw bizError;
 
+    const { data: unapprovedDocs, error: docError } = await adminClient
+        .from("documents")
+        .select("*")
+        .in("applicationno", applicationNumbers)
+        .neq("document_authenticity", "approved");
+
+    if (docError) throw docError;
+
+    return businesses.map(biz => ({
+        ...biz,
+        unapprovedDocuments: unapprovedDocs.filter(doc => doc.applicationno === biz.applicationno)
+    }));
+};
