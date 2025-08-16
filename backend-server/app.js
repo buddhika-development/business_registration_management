@@ -8,6 +8,7 @@ import authRouter from './client/routes/authRoutes.js';
 import nameCheckerRouter from "./client/routes/nameCheckerRoutes.js";
 import requestRoutes from "./admin/routes/requestRoutes.js";
 import formRouter from './client/routes/formRoutes.js';
+import businessRouter from "./admin/routes/businessRoutes.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use('/api/client', authRouter);
 app.use("/api/client", nameCheckerRouter);
 app.use("/api/admin/requests", requestRoutes);
 app.use('/api/client', formRouter);
+app.use("/api/admin/business", businessRouter);
 
 app.use((req, res) => res.status(404).json({ ok: false, errors: { message: 'Not found' } }));
 app.use((err, req, res, next) => {
