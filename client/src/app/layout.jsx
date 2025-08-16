@@ -4,7 +4,8 @@ import { Poppins } from "next/font/google";
 import Header from "../components/layouts/Header";
 import FloatingButton from "../components/ui/FloatingChatButton";
 import Footer from "@/components/layouts/Footer";
-import { AuthProvider } from "../../context/AuthContext";
+import { AuthProvider } from "../context/AuthContext";
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,6 +30,14 @@ export default function RootLayout({ children }) {
           {children}
           <FloatingButton label="Chat" />
           <Footer />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: { borderRadius: '12px' },
+              success: { duration: 3500 },
+              error: { duration: 5000 },
+            }}
+          />
         </AuthProvider>
       </body>
     </html>

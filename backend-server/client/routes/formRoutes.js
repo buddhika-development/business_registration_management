@@ -13,7 +13,7 @@ const formRouter = Router();
 formRouter.post("/step1-business", authenticate, authorizeRole('user'), step1Controller);
 formRouter.post("/step2-BusinessDetails", authenticate, authorizeRole('user'), step2Controller);
 formRouter.post("/step3-contacts", authenticate, authorizeRole('user'), step3Controller);
-formRouter.post("step4-businessDetails", authenticate, authorizeRole('user'), uploadDocs, step4DocumentsController)
+formRouter.post("/step4-businessDetails", authenticate, authorizeRole('user'), uploadDocs, step4DocumentsController)
 
 
 export default formRouter;

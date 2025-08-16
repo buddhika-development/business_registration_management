@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Logo from "../ui/Logo";
 import { mainNavigation } from "../../../links";
 import { Menu, X } from "lucide-react";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
   const [open, setOpen] = useState(false);

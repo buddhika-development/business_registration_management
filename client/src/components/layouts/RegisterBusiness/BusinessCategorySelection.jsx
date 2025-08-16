@@ -10,11 +10,11 @@ import NiceSelect from "@/components/ui/NiceSelect";
  *
  * UI stays exactly like your mock.
  */
-const SUPPORTED_TYPE = "Solo Proprietary";
+const SUPPORTED_TYPE = "sole";
 
 const BusinessCategorySelection = ({ onNext, onUnsupported }) => {
   const [type, setType] = useState(SUPPORTED_TYPE);
-  const [category, setCategory] = useState("Food");
+  const [category, setCategory] = useState("food");
 
   const handleNext = () => {
 

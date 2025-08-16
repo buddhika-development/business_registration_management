@@ -1,4 +1,3 @@
-// layouts/RegisterBusiness/DocumentsSubmission.jsx
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Section from "@/components/documents/Section";
@@ -9,6 +8,9 @@ import {
   IconHome as Home,
 } from "@/components/ui/icons/icons";
 
+const btnOutline =
+  "px-6 py-3 rounded-[16px] border font-semibold transition hover:bg-indigo-50 hover:border-primary hover:text-primary";
+
 /**
  * Props:
  *  - initial
@@ -18,9 +20,6 @@ import {
  *  - category?: string
  *  - ownershipType?: "owned" | "leased" | "consent"
  */
-const btnOutline =
-  "px-6 py-3 rounded-[16px] border font-semibold transition hover:bg-indigo-50 hover:border-primary hover:text-primary";
-
 export default function DocumentsSubmission({
   onBack,
   onSubmit,
@@ -39,10 +38,10 @@ export default function DocumentsSubmission({
     propertyNicCopy: initial?.propertyNicCopy || null,
     varipanamAssessmentNotice: initial?.varipanamAssessmentNotice || null,
     leaseAgreement: initial?.leaseAgreement || null,
-    otherAuthority1: initial?.otherAuthority1 || null, // PHI (Food only)
+    // 🔁 renamed from otherAuthority1 -> moh
+    moh: initial?.moh || null, // PHI/MOH (Food only)
   });
 
-  // track which fields user interacted with (for inline error reveal)
   const [touched, setTouched] = useState({});
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -51,7 +50,7 @@ export default function DocumentsSubmission({
     if (!form.applicationNo && appNo) {
       setForm((p) => ({ ...p, applicationNo: appNo }));
     }
-  }, [appNo]);
+  }, [appNo]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const isFood = useMemo(() => (category || "").toLowerCase() === "food", [category]);
   const isLeased = useMemo(() => (ownershipType || "").toLowerCase() === "leased", [ownershipType]);
@@ -68,10 +67,10 @@ export default function DocumentsSubmission({
   }, [isLeased]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!isFood && (form.otherAuthority1 || errors.otherAuthority1)) {
-      setForm((p) => ({ ...p, otherAuthority1: null }));
+    if (!isFood && (form.moh || errors.moh)) {
+      setForm((p) => ({ ...p, moh: null }));
       setErrors((e) => {
-        const { otherAuthority1, ...rest } = e || {};
+        const { moh, ...rest } = e || {};
         return rest;
       });
     }
@@ -80,13 +79,12 @@ export default function DocumentsSubmission({
   const setFile = (key, file) => {
     setForm((p) => ({ ...p, [key]: file }));
     setTouched((t) => ({ ...t, [key]: true }));
-    setErrors((e) => ({ ...e, [key]: "" })); // clear error on change
+    setErrors((e) => ({ ...e, [key]: "" }));
   };
 
   const clearFile = (key) => {
     setForm((p) => ({ ...p, [key]: null }));
     setTouched((t) => ({ ...t, [key]: true }));
-    // keep/compute error on submit
   };
 
   const requiredEntries = [
@@ -96,7 +94,8 @@ export default function DocumentsSubmission({
     { key: "propertyNicCopy", label: "Property Owner NIC Copy", visible: true },
     { key: "varipanamAssessmentNotice", label: "Varipanam Assessment Notice", visible: true },
     { key: "leaseAgreement", label: "Lease Agreement", visible: isLeased },
-    { key: "otherAuthority1", label: "PHI Certificate (Food Business)", visible: isFood },
+    // 🔁 now matches backend key
+    { key: "moh", label: "PHI / MOH Certificate (Food Business)", visible: isFood },
   ];
 
   const validate = (state = form) => {
@@ -112,14 +111,11 @@ export default function DocumentsSubmission({
     const nextErrors = validate();
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
-
-      // scroll to first error for better UX
       try {
         const firstKey = Object.keys(nextErrors)[0];
         const node = rootRef.current?.querySelector(`[data-doc-key="${firstKey}"]`);
         node?.scrollIntoView({ behavior: "smooth", block: "center" });
-      } catch { /* ignore */ }
-
+      } catch { }
       return;
     }
 
@@ -131,23 +127,23 @@ export default function DocumentsSubmission({
       propertyNicCopy: form.propertyNicCopy,
       varipanamAssessmentNotice: form.varipanamAssessmentNotice,
       leaseAgreement: isLeased ? form.leaseAgreement : null,
-      otherAuthority1: isFood ? form.otherAuthority1 : null,
+      // 🔁 backend wants `moh`
+      moh: isFood ? form.moh : null,
     });
   };
 
-  const chip = "flex items-center gap-2 rounded-xl bg-indigo-50/80 px-3 py-2 text-sm border border-transparent";
+  const chip =
+    "flex items-center gap-2 rounded-xl bg-indigo-50/80 px-3 py-2 text-sm border border-transparent";
 
-  // helper to decide whether to show error under a field
   const errFor = (key) => {
     const msg = errors[key];
     if (!msg) return "";
-    return (submitted || touched[key]) ? msg : "";
+    return submitted || touched[key] ? msg : "";
   };
 
   return (
     <section ref={rootRef} className="min-h-[calc(100vh-80px)] py-10">
       <div className="max-w-6xl mx-auto space-y-8">
-        {/* Heading */}
         <header className="text-center">
           <h1 className="text-3xl font-extrabold tracking-tight">
             Upload the required <span className="text-primary">Documents</span>
@@ -157,7 +153,6 @@ export default function DocumentsSubmission({
           </p>
         </header>
 
-        {/* Summary chips */}
         <div className="grid sm:grid-cols-3 gap-3">
           <div className={chip}>
             <InfoDot />
@@ -184,7 +179,6 @@ export default function DocumentsSubmission({
           </div>
         </div>
 
-        {/* Groups */}
         <Section title="Identity & Legal">
           <div className="grid md:grid-cols-2 gap-5">
             <div data-doc-key="gnCertificates">
@@ -248,41 +242,37 @@ export default function DocumentsSubmission({
               />
             </div>
             {isFood && (
-              <div data-doc-key="otherAuthority1">
+              <div data-doc-key="moh">
                 <FileCard
                   required
-                  label="PHI Certificate (Food Business)"
-                  hint="Public Health Inspector certificate"
-                  value={form.otherAuthority1}
-                  error={errFor("otherAuthority1")}
-                  onChange={(f) => setFile("otherAuthority1", f)}
-                  onClear={() => clearFile("otherAuthority1")}
+                  label="PHI / MOH Certificate (Food Business)"
+                  hint="Public Health Inspector / MOH certificate"
+                  value={form.moh}
+                  error={errFor("moh")}
+                  onChange={(f) => setFile("moh", f)}
+                  onClear={() => clearFile("moh")}
                 />
               </div>
             )}
           </div>
         </Section>
 
-        
-            {isLeased && (
-              <Section  title="Business Licensing" >
-              <div data-doc-key="leaseAgreement">
-                <FileCard
-                  required
-                  label="Lease Agreement"
-                  hint="Complete, signed agreement"
-                  value={form.leaseAgreement}
-                  error={errFor("leaseAgreement")}
-                  onChange={(f) => setFile("leaseAgreement", f)}
-                  onClear={() => clearFile("leaseAgreement")}
-                />
-              </div>
-              </Section>
-             
-            )}
-        
+        {isLeased && (
+          <Section title="Business Licensing">
+            <div data-doc-key="leaseAgreement">
+              <FileCard
+                required
+                label="Lease Agreement"
+                hint="Complete, signed agreement"
+                value={form.leaseAgreement}
+                error={errFor("leaseAgreement")}
+                onChange={(f) => setFile("leaseAgreement", f)}
+                onClear={() => clearFile("leaseAgreement")}
+              />
+            </div>
+          </Section>
+        )}
 
-        {/* Actions */}
         <div className="flex justify-between pt-2">
           <button type="button" onClick={onBack} className={btnOutline}>
             Back

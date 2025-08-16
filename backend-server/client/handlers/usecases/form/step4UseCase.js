@@ -20,13 +20,13 @@ export default async function step4DocumentsUseCase({ body, files }) {
     const businessCategory = (biz.businesscategory || '').toLowerCase();
     const proprietorNic = biz.proprietornic;
 
-    // 2) get proprietor (name + address for affidavit/moh)
-    const prop = proprietorNic ? await getProprietorByNic(proprietorNic) : null;
-    if (!prop) return { ok: false, status: 422, message: 'Proprietor details not found for this application.' };
+    // // 2) get proprietor (name + address for affidavit/moh)
+    // const prop = proprietorNic ? await getProprietorByNic(proprietorNic) : null;
+    // if (!prop) return { ok: false, status: 422, message: 'Proprietor details not found for this application.' };
 
-    const proprietorName = prop.fullname;
-    const proprietorAddress = [prop.addressline1, prop.addressline2, prop.city].filter(Boolean).join(', ');
-    const mohArea = prop.dsdivision || '';
+    // const proprietorName = prop.fullname;
+    // const proprietorAddress = [prop.addressline1, prop.addressline2, prop.city].filter(Boolean).join(', ');
+    // const mohArea = prop.dsdivision || '';
 
     // 3) get property owner + premises (needed for lease validation)
     const prem = await getPropertyOwnerAndPremises(applicationNo);
@@ -46,10 +46,10 @@ export default async function step4DocumentsUseCase({ body, files }) {
     const fLease = fileFrom(files, 'leaseAgreement');
     const fMoh = fileFrom(files, 'moh');
 
-    // 5) mandatory MOH when category=food
-    if (businessCategory === 'food' && !fMoh) {
-        return { ok: false, status: 422, message: 'MOH/PHI certificate is required for food category.' };
-    }
+    // // 5) mandatory MOH when category=food
+    // if (businessCategory === 'food' && !fMoh) {
+    //     return { ok: false, status: 422, message: 'MOH/PHI certificate is required for food category.' };
+    // }
 
     // 6) call AI validators where applicable
     // Persist locations are hints to vendor; you will actually save files yourself after this step.

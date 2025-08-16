@@ -6,7 +6,10 @@ import BusinessDetails from "@/components/layouts/RegisterBusiness/BusinessDetai
 import OwnerDetails from "@/components/layouts/RegisterBusiness/OwnerDetails";
 import DocumentsSubmission from "@/components/layouts/RegisterBusiness/DocumentsSubmission";
 import Preview from "@/components/layouts/RegisterBusiness/Preview";
-import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { notify, extractMsg } from "@/lib/notify";
+import { postStep1, postStep2, postStep3, postStep4 } from "@/lib/registrationApi";
+import { mapStep1, mapStep2, mapStep3, mapStep4Files } from "@/lib/registrationMappers";
 
 const STORAGE_KEY = "rb-wizard-v1";
 
@@ -30,20 +33,19 @@ function migrateBusiness(b) {
 }
 
 export default function Page() {
-  const [step, setStep] = useState(1);
-  const [unsupported, setUnsupported] = useState(null); // { type, category } | null
+  // ⚠️ All hooks go first (no early return before them)
   const { status } = useRequireAuth();
 
-  if (status !== 'authenticated') {
-    // while checking/refreshing, you can render a skeleton
-    return <div className="p-8">Checking session…</div>;
-  }
+  const [step, setStep] = useState(1);
+  const [unsupported, setUnsupported] = useState(null); // { type, category } | null
+
   // single source of truth
   const [form, setForm] = useState({
-    category: { type: "", category: "" },
-    business: null,
-    owner: null,
-    documents: null, // keep actual File objects here (not saved to localStorage)
+    category: { type: "", category: "" }, // step 1
+    business: null,                       // step 2
+    owner: null,                          // step 3
+    documents: null,                      // step 4 (File objects, not saved)
+    applicationNo: "",                    // comes from step 1 backend
   });
 
   // load draft on mount (files cannot be restored)
@@ -57,6 +59,7 @@ export default function Page() {
         business: migrateBusiness(saved.business) || null,
         owner: saved.owner || null,
         documents: null,
+        applicationNo: saved.applicationNo || "",
       });
       if (saved.step) setStep(saved.step);
     } catch {
@@ -82,30 +85,116 @@ export default function Page() {
     }
   }, [form, step]);
 
-  // app number (create once)
-  const ensureAppNo = () => {
-    const existing = form.business?.ApplicationNo || form.owner?.applicationNo;
-    if (existing) return existing;
-    const ts = Date.now().toString().slice(-6);
-    const rnd = Math.floor(Math.random() * 900) + 100;
-    return `APP-${ts}${rnd}`;
-  };
+  // ---- STEP HANDLERS (call backend, keep UI intact) ----
 
+  // STEP 1 → /api/client/step1-business
+  async function handleStep1Next({ type, category }) {
+    try {
+      const payload = mapStep1({ businessType: type, businessCategory: category });
+      // console.log("[Step1] payload →", payload);
+      const res = await postStep1(payload);
+      if (!res?.data?.ok) {
+        throw new Error(res?.data?.errors?.message || "Step 1 failed");
+      }
+      const appNo =
+        res?.data?.data?.ApplicationNo ||
+        res?.data?.data?.applicationNo ||
+        "";
+      if (!appNo) throw new Error("No ApplicationNo returned from server.");
+
+      setForm((p) => ({
+        ...p,
+        category: { type, category },
+        applicationNo: appNo,
+        business: { ...(p.business || {}), ApplicationNo: appNo },
+        owner: { ...(p.owner || {}), applicationNo: appNo },
+      }));
+      setUnsupported(null);
+      notify.success(res?.data?.message || "Step 1 completed");
+      setStep(2);
+    } catch (e) {
+      notify.error(extractMsg(e, "Step 1 error"));
+    }
+  }
+
+  // STEP 2 → /api/client/step2-BusinessDetails
+  async function handleStep2Next(values) {
+    try {
+      const appNo = form.applicationNo || values.ApplicationNo;
+      const payload = mapStep2({
+        applicationNo: appNo,
+        business: values,
+        premisesType: values?.PremisesType,
+      });
+      // console.log("[Step2] payload →", payload);
+      const res = await postStep2(payload);
+      if (!res?.data?.ok) {
+        throw new Error(res?.data?.errors?.message || "Step 2 failed");
+      }
+      setForm((p) => ({
+        ...p,
+        business: { ...values, ApplicationNo: appNo },
+        owner: { ...(p.owner || {}), applicationNo: appNo },
+      }));
+      notify.success(res?.data?.message || "Step 2 saved");
+      setStep(3);
+    } catch (e) {
+      notify.error(extractMsg(e, "Step 2 error"));
+    }
+  }
+
+  // STEP 3 → /api/client/step3-contacts
+  async function handleStep3Next(values) {
+    try {
+      const appNo = form.applicationNo || form.business?.ApplicationNo || values?.ApplicationNo;
+      const payload = mapStep3(appNo, values);
+      // console.log("[Step3] payload →", payload);
+      const res = await postStep3(payload);
+      if (!res?.data?.ok) {
+        throw new Error(res?.data?.errors?.message || "Step 3 failed");
+      }
+      setForm((p) => ({ ...p, owner: values }));
+      notify.success(res?.data?.message || "Proprietor details saved");
+      setStep(4);
+    } catch (e) {
+      notify.error(extractMsg(e, "Step 3 error"));
+    }
+  }
+
+  // STEP 4 → /api/client/step4-businessDetails (multipart)
+  async function handleStep4Submit(values) {
+    try {
+      const appNo = form.applicationNo || form.business?.ApplicationNo || form.owner?.applicationNo || "";
+      if (!appNo) throw new Error("Missing application number for documents upload.");
+
+      const files = mapStep4Files(values);
+      // console.log("[Step4] files →", files);
+      const res = await postStep4({ applicationNo: appNo, files });
+      if (!res?.data?.ok) {
+        throw new Error(res?.data?.errors?.message || "Step 4 failed");
+      }
+      notify.success(res?.data?.message || "Documents uploaded");
+      setForm((p) => ({ ...p, documents: values }));
+      setStep(5); // Preview
+    } catch (e) {
+      notify.error(extractMsg(e, "Step 4 error"));
+    }
+  }
+
+  // ✅ Only now do the conditional render (after hooks have run)
+  if (status !== "authenticated") {
+    return <div className="p-8">Checking session…</div>;
+  }
+
+  // ---- RENDER STEPS (UI unchanged) ----
   return (
     <div className="p-6">
       {/* Step 1 — Category */}
       {step === 1 && !unsupported && (
         <BusinessCategorySelection
-          onNext={({ type, category }) => {
-            const appNo = ensureAppNo();
-            setForm((p) => ({
-              ...p,
-              category: { type, category },
-              business: { ...(p.business || {}), ApplicationNo: appNo },
-              owner: { ...(p.owner || {}), applicationNo: appNo },
-            }));
-            setStep(2);
-          }}
+          onNext={handleStep1Next}
+          onSubmit={handleStep1Next}                 // alias safety
+          onContinue={handleStep1Next}               // alias safety
           onUnsupported={({ type, category }) => setUnsupported({ type, category })}
         />
       )}
@@ -121,46 +210,33 @@ export default function Page() {
       {/* Step 2 — Business */}
       {step === 2 && (
         <BusinessDetails
-          appNo={form.business?.ApplicationNo}
+          appNo={form.applicationNo || form.business?.ApplicationNo}
           initial={form.business || {}}
           onBack={() => setStep(1)}
-          onNext={(values) => {
-            const appNo = values.ApplicationNo || ensureAppNo();
-            setForm((p) => ({
-              ...p,
-              business: { ...values, ApplicationNo: appNo },
-              owner: { ...(p.owner || {}), applicationNo: appNo },
-            }));
-            setStep(3);
-          }}
+          onNext={handleStep2Next}
+          onSubmit={handleStep2Next}                 // alias safety
         />
       )}
 
       {/* Step 3 — Owner */}
       {step === 3 && (
         <OwnerDetails
-          appNo={form.business?.ApplicationNo || form.owner?.applicationNo}
+          appNo={form.applicationNo || form.business?.ApplicationNo || form.owner?.applicationNo}
           initial={form.owner || {}}
           onBack={() => setStep(2)}
-          onNext={(values) => {
-            setForm((p) => ({ ...p, owner: values }));
-            setStep(4);
-          }}
+          onNext={handleStep3Next}
         />
       )}
 
       {/* Step 4 — Documents */}
       {step === 4 && (
         <DocumentsSubmission
-          appNo={form.business?.ApplicationNo || form.owner?.applicationNo}
+          appNo={form.applicationNo || form.business?.ApplicationNo || form.owner?.applicationNo}
           initial={form.documents || {}}
           category={form.category?.category}
           ownershipType={form.business?.OwnershipType}
           onBack={() => setStep(3)}
-          onSubmit={(values) => {
-            setForm((p) => ({ ...p, documents: values }));
-            setStep(5);
-          }}
+          onSubmit={handleStep4Submit}
         />
       )}
 
@@ -170,6 +246,7 @@ export default function Page() {
           data={form}
           onBack={() => setStep(4)}
           onConfirm={() => {
+            // keep your preview confirmation behavior
             const fileToName = (v) =>
               typeof File !== "undefined" && v instanceof File
                 ? v.name
