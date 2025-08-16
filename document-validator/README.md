@@ -91,4 +91,6 @@ Run:
 python src/app.py
 # Visit http://localhost:4000/health
 ```
+<img width="678" height="214" alt="image" src="https://github.com/user-attachments/assets/5a42ef57-b03f-47df-9ed4-8d6985e2a903" />
+user barea key : 8932d6621045d6c18c8688feeb9a594e59bb464a1cb2e9645faa189ce24f4f00455c91bf6cb5f9eb2ca868e8d1a35c5b8081974f3257251e950b73c0c7cfccfd
 
