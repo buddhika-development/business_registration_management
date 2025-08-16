@@ -60,3 +60,21 @@ export const getDocumentsWithProviders = async (req, res) => {
 };
 
 
+export const getValidBusinesses = async (req, res) => {
+    try {
+        const businesses = await useCase.fetchValidBusinesses();
+        return ok(res, businesses, "Valid businesses fetched successfully");
+    } catch (err) {
+        return fail(res, err.message, 500);
+    }
+};
+
+export const getPendingBusinesses = async (req, res) => {
+    try {
+        const businesses = await useCase.fetchPendingBusinesses();
+        return ok(res, businesses, "Pending businesses fetched successfully");
+    } catch (err) {
+        return fail(res, err.message, 500);
+    }
+};
+
